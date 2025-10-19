@@ -2,8 +2,8 @@
 import { v4 as uuidv4 } from 'uuid';
 import apiClient from './apiClient';
 
-// Check if we're in development mode (use localStorage) or production (use API)
-const isDevelopment = import.meta.env.DEV;
+// Always use API (real server) - no localStorage
+const isDevelopment = false; // Always use real API
 
 // Storage keys for localStorage fallback
 const GALLERY_ITEMS_KEY = 'gallery_items';
