@@ -2,8 +2,9 @@
 import { v4 as uuidv4 } from 'uuid';
 import apiClient from './apiClient';
 
-// Always use API (real server) - no localStorage
-const isDevelopment = false; // Always use real API
+// Auto-detect if API is available
+let useAPI = true; // Try API first
+let apiCheckDone = false;
 
 // Storage keys for localStorage fallback
 const GALLERY_ITEMS_KEY = 'gallery_items';
@@ -109,149 +110,148 @@ const defaultGalleryItems = [
   }
 ];
 
+// Helper function to check API availability and fallback to localStorage
+async function withAPIFallback(apiCall, localStorageFallback) {
+  if (useAPI) {
+    try {
+      const result = await apiCall();
+      apiCheckDone = true;
+      return result;
+    } catch (error) {
+      console.warn('API call failed, using localStorage fallback:', error);
+      if (!apiCheckDone) {
+        useAPI = false; // Switch to localStorage after first API failure
+        apiCheckDone = true;
+      }
+      return localStorageFallback();
+    }
+  } else {
+    return localStorageFallback();
+  }
+}
+
 // Gallery Item management
 export const GalleryItem = {
   // List all gallery items with optional sorting
   async list(sortBy = '-created_date') {
-    if (isDevelopment) {
-      // Use localStorage in development
-      try {
-        const items = JSON.parse(localStorage.getItem(GALLERY_ITEMS_KEY)) || [];
-        
-        if (items.length === 0) {
-          localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(defaultGalleryItems));
+    return withAPIFallback(
+      // API call
+      () => apiClient.getGalleryItems(),
+      // localStorage fallback
+      () => {
+        try {
+          const items = JSON.parse(localStorage.getItem(GALLERY_ITEMS_KEY)) || [];
+
+          if (items.length === 0) {
+            localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(defaultGalleryItems));
+            return [...defaultGalleryItems];
+          }
+
+          const sortedItems = [...items].sort((a, b) => {
+            const field = sortBy.startsWith('-') ? sortBy.slice(1) : sortBy;
+            const direction = sortBy.startsWith('-') ? -1 : 1;
+
+            if (field === 'created_date') {
+              return direction * (new Date(b[field]) - new Date(a[field]));
+            }
+
+            if (typeof a[field] === 'string') {
+              return direction * a[field].localeCompare(b[field]);
+            }
+
+            return direction * (a[field] - b[field]);
+          });
+
+          return sortedItems;
+        } catch (error) {
+          console.error('Error loading gallery items:', error);
           return [...defaultGalleryItems];
         }
-        
-        const sortedItems = [...items].sort((a, b) => {
-          const field = sortBy.startsWith('-') ? sortBy.slice(1) : sortBy;
-          const direction = sortBy.startsWith('-') ? -1 : 1;
-          
-          if (field === 'created_date') {
-            return direction * (new Date(b[field]) - new Date(a[field]));
-          }
-          
-          if (typeof a[field] === 'string') {
-            return direction * a[field].localeCompare(b[field]);
-          }
-          
-          return direction * (a[field] - b[field]);
-        });
-        
-        return sortedItems;
-      } catch (error) {
-        console.error('Error loading gallery items:', error);
-        return [...defaultGalleryItems];
       }
-    } else {
-      // Use API in production
-      try {
-        return await apiClient.getGalleryItems();
-      } catch (error) {
-        console.error('Error loading gallery items from API:', error);
-        return [];
-      }
-    }
+    );
   },
 
   // Get single item by ID
   async get(id) {
-    if (isDevelopment) {
-      const items = await this.list();
-      return items.find(item => item.id === id);
-    } else {
-      try {
-        return await apiClient.getGalleryItem(id);
-      } catch (error) {
-        console.error('Error getting gallery item:', error);
-        return null;
+    return withAPIFallback(
+      () => apiClient.getGalleryItem(id),
+      async () => {
+        const items = await this.list();
+        return items.find(item => item.id === id);
       }
-    }
+    );
   },
 
   // Create new gallery item
   async create(itemData) {
-    if (isDevelopment) {
-      try {
-        const items = await this.list();
-        const newItem = {
-          id: uuidv4(),
-          ...itemData,
-          created_date: new Date().toISOString(),
-          updated_date: new Date().toISOString()
-        };
-        
-        items.push(newItem);
-        localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(items));
-        return newItem;
-      } catch (error) {
-        console.error('Error creating gallery item:', error);
-        throw error;
+    return withAPIFallback(
+      () => apiClient.createGalleryItem(itemData),
+      async () => {
+        try {
+          const items = await this.list();
+          const newItem = {
+            id: uuidv4(),
+            ...itemData,
+            created_date: new Date().toISOString(),
+            updated_date: new Date().toISOString()
+          };
+
+          items.push(newItem);
+          localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(items));
+          return newItem;
+        } catch (error) {
+          console.error('Error creating gallery item:', error);
+          throw error;
+        }
       }
-    } else {
-      try {
-        return await apiClient.createGalleryItem(itemData);
-      } catch (error) {
-        console.error('Error creating gallery item via API:', error);
-        throw error;
-      }
-    }
+    );
   },
 
   // Update existing gallery item
   async update(id, updateData) {
-    if (isDevelopment) {
-      try {
-        const items = await this.list();
-        const itemIndex = items.findIndex(item => item.id === id);
-        
-        if (itemIndex === -1) {
-          throw new Error('Item not found');
+    return withAPIFallback(
+      () => apiClient.updateGalleryItem(id, updateData),
+      async () => {
+        try {
+          const items = await this.list();
+          const itemIndex = items.findIndex(item => item.id === id);
+
+          if (itemIndex === -1) {
+            throw new Error('Item not found');
+          }
+
+          items[itemIndex] = {
+            ...items[itemIndex],
+            ...updateData,
+            updated_date: new Date().toISOString()
+          };
+
+          localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(items));
+          return items[itemIndex];
+        } catch (error) {
+          console.error('Error updating gallery item:', error);
+          throw error;
         }
-        
-        items[itemIndex] = {
-          ...items[itemIndex],
-          ...updateData,
-          updated_date: new Date().toISOString()
-        };
-        
-        localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(items));
-        return items[itemIndex];
-      } catch (error) {
-        console.error('Error updating gallery item:', error);
-        throw error;
       }
-    } else {
-      try {
-        return await apiClient.updateGalleryItem(id, updateData);
-      } catch (error) {
-        console.error('Error updating gallery item via API:', error);
-        throw error;
-      }
-    }
+    );
   },
 
   // Delete gallery item
   async delete(id) {
-    if (isDevelopment) {
-      try {
-        const items = await this.list();
-        const filteredItems = items.filter(item => item.id !== id);
-        localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(filteredItems));
-        return true;
-      } catch (error) {
-        console.error('Error deleting gallery item:', error);
-        throw error;
+    return withAPIFallback(
+      () => apiClient.deleteGalleryItem(id),
+      async () => {
+        try {
+          const items = await this.list();
+          const filteredItems = items.filter(item => item.id !== id);
+          localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(filteredItems));
+          return true;
+        } catch (error) {
+          console.error('Error deleting gallery item:', error);
+          throw error;
+        }
       }
-    } else {
-      try {
-        await apiClient.deleteGalleryItem(id);
-        return true;
-      } catch (error) {
-        console.error('Error deleting gallery item via API:', error);
-        throw error;
-      }
-    }
+    );
   }
 };
 
@@ -259,126 +259,109 @@ export const GalleryItem = {
 export const User = {
   // Login
   async login(email, password) {
-    if (isDevelopment) {
-      // Simple hardcoded admin credentials for development
-      if (email === 'admin@trachtenberg.co.il' && password === 'Tr@ch2025!') {
-        const session = {
-          user: { email, role: 'admin' },
-          token: 'local-admin-token',
-          expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
-        };
-        localStorage.setItem(USER_SESSION_KEY, JSON.stringify(session));
-        return session;
+    return withAPIFallback(
+      () => apiClient.login(email, password),
+      () => {
+        // Simple hardcoded admin credentials for fallback
+        if (email === 'admin@trachtenberg.co.il' && password === 'Tr@ch2025!') {
+          const session = {
+            user: { email, role: 'admin' },
+            token: 'local-admin-token',
+            expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+          };
+          localStorage.setItem(USER_SESSION_KEY, JSON.stringify(session));
+          return session;
+        }
+        throw new Error('Invalid credentials');
       }
-      throw new Error('Invalid credentials');
-    } else {
-      try {
-        return await apiClient.login(email, password);
-      } catch (error) {
-        console.error('Error logging in via API:', error);
-        throw error;
-      }
-    }
+    );
   },
 
   // Check if user is authenticated
   async isAuthenticated() {
-    if (isDevelopment) {
-      try {
-        const session = JSON.parse(localStorage.getItem(USER_SESSION_KEY));
-        if (!session || new Date(session.expires) < new Date()) {
-          return false;
-        }
-        return true;
-      } catch {
-        return false;
-      }
-    } else {
-      try {
+    return withAPIFallback(
+      async () => {
         await apiClient.getCurrentUser();
         return true;
-      } catch {
-        return false;
+      },
+      () => {
+        try {
+          const session = JSON.parse(localStorage.getItem(USER_SESSION_KEY));
+          if (!session || new Date(session.expires) < new Date()) {
+            return false;
+          }
+          return true;
+        } catch {
+          return false;
+        }
       }
-    }
+    );
   },
 
   // Logout
   async logout() {
-    if (isDevelopment) {
-      localStorage.removeItem(USER_SESSION_KEY);
-      return true;
-    } else {
-      try {
-        await apiClient.logout();
+    return withAPIFallback(
+      () => apiClient.logout(),
+      () => {
+        localStorage.removeItem(USER_SESSION_KEY);
         return true;
-      } catch (error) {
-        console.error('Error logging out via API:', error);
-        return false;
       }
-    }
+    );
   }
 };
 
 // File upload simulation (for development) or real upload (for production)
 export const UploadFile = async ({ file }) => {
-  if (isDevelopment) {
-    // Development mode - use object URLs
-    return new Promise((resolve, reject) => {
-      if (!file) {
-        reject(new Error('No file provided'));
-        return;
-      }
+  return withAPIFallback(
+    () => apiClient.uploadFile(file),
+    () => {
+      // Fallback - use demo images
+      return new Promise((resolve, reject) => {
+        if (!file) {
+          reject(new Error('No file provided'));
+          return;
+        }
 
-      try {
-        const objectUrl = URL.createObjectURL(file);
-        const fileId = uuidv4();
-        
-        const fileData = {
-          id: fileId,
-          name: file.name,
-          type: file.type,
-          size: file.size,
-          objectUrl: objectUrl,
-          uploaded_at: new Date().toISOString()
-        };
-        
-        const files = JSON.parse(localStorage.getItem('uploaded_files') || '[]');
-        files.push(fileData);
-        localStorage.setItem('uploaded_files', JSON.stringify(files));
-        
-        const demoUrls = [
-          '/images/gallery/general-1.jpg',
-          '/images/gallery/general-2.jpg',
-          '/images/gallery/besari-1.jpg',
-          '/images/gallery/halavi-1.jpg',
-          '/images/gallery/kelim-1.jpg'
-        ];
-        
-        const randomUrl = demoUrls[Math.floor(Math.random() * demoUrls.length)];
-        resolve({ file_url: randomUrl });
-      } catch (error) {
-        reject(new Error('Failed to process file'));
-      }
-    });
-  } else {
-    // Production mode - use real API upload
-    try {
-      return await apiClient.uploadFile(file);
-    } catch (error) {
-      console.error('Error uploading file via API:', error);
-      throw error;
+        try {
+          const objectUrl = URL.createObjectURL(file);
+          const fileId = uuidv4();
+
+          const fileData = {
+            id: fileId,
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            objectUrl: objectUrl,
+            uploaded_at: new Date().toISOString()
+          };
+
+          const files = JSON.parse(localStorage.getItem('uploaded_files') || '[]');
+          files.push(fileData);
+          localStorage.setItem('uploaded_files', JSON.stringify(files));
+
+          const demoUrls = [
+            '/images/gallery/general-1.jpg',
+            '/images/gallery/general-2.jpg',
+            '/images/gallery/besari-1.jpg',
+            '/images/gallery/halavi-1.jpg',
+            '/images/gallery/kelim-1.jpg'
+          ];
+
+          const randomUrl = demoUrls[Math.floor(Math.random() * demoUrls.length)];
+          resolve({ file_url: randomUrl });
+        } catch (error) {
+          reject(new Error('Failed to process file'));
+        }
+      });
     }
-  }
+  );
 };
 
-// Initialize default data if needed (development only)
+// Initialize default data if needed
 export const initializeDefaultData = () => {
-  if (isDevelopment) {
-    const existingItems = localStorage.getItem(GALLERY_ITEMS_KEY);
-    if (!existingItems) {
-      localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(defaultGalleryItems));
-    }
+  const existingItems = localStorage.getItem(GALLERY_ITEMS_KEY);
+  if (!existingItems) {
+    localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(defaultGalleryItems));
   }
 };
 
