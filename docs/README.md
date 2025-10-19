@@ -1,56 +1,138 @@
-# 📚 תיעוד פרויקט עמנואל טרכטנברג - הפקת אירועים
+# 📚 תיעוד - עמנואל טרכטנברג הפקת אירועים
 
-## 📁 מבנה התיעוד
+## 🗂️ מבנה התיעוד
 
-### 🚀 **תיקיית Deployment - פריסה**
-מדריכים לפריסת האתר בשרתים שונים:
+### **📁 deployment/** - מדריכי פריסה
+- **HOSTINGER_DEPLOYMENT_GUIDE.md** - מדריך מפורט לפריסה ב-Hostinger VPS
+- **GITHUB_SECRETS_SETUP.md** - הגדרת GitHub Secrets לפריסה אוטומטית
+- **server-setup.sh** - סקריפט התקנה אוטומטי לשרת
 
-- **DEPLOYMENT_GUIDE.md** - מדריך פריסה כללי לכל הפלטפורמות
-- **HOSTINGER_DEPLOYMENT_GUIDE.md** - מדריך מפורט לפריסה בהוסטינגר
-- **STEP_BY_STEP_DEPLOYMENT.md** - צעד אחרי צעד עם הוסטינגר
-- **QUICK_HOSTINGER_SETUP.md** - הגדרה מהירה בהוסטינגר
-- **GITHUB_SECRETS_SETUP.md** - הגדרת אבטחה ב-GitHub Actions
-- **QUICK_DEPLOY.md** - פריסה מהירה ב-5 דקות
-- **PRE_DEPLOYMENT_CHECKLIST.md** - רשימת בדיקות לפני פריסה
-- **server-setup.sh** - סקריפט הגדרה אוטומטי לשרת
+### **📁 database/** - מדריכי בסיס נתונים
+- **BACKEND_ARCHITECTURE.md** - ארכיטקטורת הBackend
+- **DATABASE_REAL_SETUP.md** - הגדרת PostgreSQL אמיתי
 
-### 🗃️ **תיקיית Database - בסיס נתונים**
-מדריכים להגדרת בסיס הנתונים:
-
-- **DATABASE_SETUP_GUIDE.md** - מדריך הגדרת PostgreSQL מלא
-- **DATABASE_REAL_SETUP.md** - הסבר על מיקום ותפקיד הDB
-- **BACKEND_ARCHITECTURE.md** - ארכיטקטורת Backend מלאה
-
-### 🛠️ **תיקיית Development - פיתוח**
-מדריכים לפיתוח ותחזוקה:
-
-- **FULLSTACK_SUMMARY.md** - סיכום מלא של הפרויקט
-- **MANUAL_GITHUB_UPLOAD.md** - העלאה ידנית לGitHub
+### **📁 development/** - מדריכי פיתוח
+- **FULLSTACK_SUMMARY.md** - סיכום המערכת המלאה
+- **MANUAL_GITHUB_UPLOAD.md** - העלאה ידנית ל-GitHub
 
 ---
 
-## 🎯 מדריכים מומלצים לפי מטרה
+## 🚀 מדריכי פריסה
 
-### 🚀 **רוצה לפרוס מהר?**
-1. **QUICK_DEPLOY.md** - פריסה ב-5 דקות
-2. **DEPLOYMENT_GUIDE.md** - אפשרויות פריסה
+### **Hostinger VPS** (מומלץ - $3.99/חודש)
 
-### 🖥️ **רוצה VPS מלא?**
-1. **STEP_BY_STEP_DEPLOYMENT.md** - מדריך מלא
-2. **HOSTINGER_DEPLOYMENT_GUIDE.md** - ספציפי להוסטינגר
-3. **DATABASE_SETUP_GUIDE.md** - הגדרת בסיס נתונים
+#### **למה Hostinger?**
+- ✅ **זול ביותר** - $3.99/חודש
+- ✅ **שליטה מלאה** - שרת שלך
+- ✅ **פריסה אוטומטית** דרך GitHub Actions
+- ✅ **200 תמונות** בקלות
+- ✅ **לא נרדם** - תמיד זמין
 
-### 🔧 **רוצה להבין את הקוד?**
-1. **FULLSTACK_SUMMARY.md** - סקירה כללית
-2. **BACKEND_ARCHITECTURE.md** - ארכיטקטורת השרת
+#### **צעדים:**
+1. **רכוש VPS 1** ב-Hostinger
+2. **עקוב אחר המדריך**: [HOSTINGER_DEPLOYMENT_GUIDE.md](deployment/HOSTINGER_DEPLOYMENT_GUIDE.md)
+3. **הגדר GitHub Actions**: [GITHUB_SECRETS_SETUP.md](deployment/GITHUB_SECRETS_SETUP.md)
+4. **האתר יהיה זמין!**
 
-### 🔐 **רוצה להגדיר GitHub Actions?**
-1. **GITHUB_SECRETS_SETUP.md** - הגדרת אבטחה
-2. **MANUAL_GITHUB_UPLOAD.md** - העלאה לGitHub
+### **Railway** ($20/חודש)
+
+#### **למה Railway?**
+- ✅ **פריסה בקליק** - ללא תחזוקה
+- ✅ **ניהול אוטומטי** - Railway מטפל בהכל
+- ⚠️ **יקר יותר** - $20/חודש
+- ⚠️ **עלול לירדם** בHobby Plan
+
+#### **צעדים:**
+1. **היכנס ל-Railway.app**
+2. **חבר את GitHub Repository**
+3. **הוסף PostgreSQL**
+4. **הגדר Environment Variables**
+5. **האתר יהיה זמין!**
+
+📖 **מדריך מלא**: ראה ב-README הראשי
 
 ---
 
-## 🎉 הפרויקט מוכן!
+## 🗄️ בסיס נתונים
 
-כל התיעוד מאורגן ומסודר לפי נושאים.
-בחר את המדריך המתאים למטרה שלך והתחל!
+### **PostgreSQL Setup**
+
+#### **למה PostgreSQL?**
+- 🐘 **אמין ומקצועי**
+- 📊 **מושלם ל-Node.js**
+- 🔒 **בטוח**
+- 🆓 **חינמי**
+
+#### **מה זה כולל:**
+- **טבלת Users** - משתמשי מערכת (מנהלים)
+- **טבלת GalleryItems** - פריטי גלריה
+- **JWT Authentication** - אבטחה
+- **Sequelize ORM** - ניהול DB קל
+
+📖 **מדריך מלא**: [DATABASE_REAL_SETUP.md](database/DATABASE_REAL_SETUP.md)
+
+---
+
+## 💻 פיתוח מקומי
+
+### **התקנה:**
+```bash
+# Clone
+git clone https://github.com/Riky-Shlomowitz/ET_events.git
+cd ET_events
+
+# Frontend
+npm install
+npm run dev
+
+# Backend (בטרמינל נפרד)
+cd backend
+npm install
+npm run dev
+```
+
+### **הגדרת DB מקומי:**
+```bash
+# התקן PostgreSQL
+# צור DB
+createdb trachtenberg_events
+
+# הגדר .env
+cp backend/.env.example backend/.env
+# ערוך את הפרטים
+```
+
+📖 **מדריך מלא**: [FULLSTACK_SUMMARY.md](development/FULLSTACK_SUMMARY.md)
+
+---
+
+## 🔧 כלים ושירותים
+
+### **Frontend:**
+- ⚛️ React 18
+- ⚡ Vite
+- 🎨 Tailwind CSS + Shadcn/ui
+
+### **Backend:**
+- 🟢 Node.js 18
+- 🚂 Express 5
+- 🐘 PostgreSQL
+- 🔐 JWT
+
+### **DevOps:**
+- 🔄 GitHub Actions
+- 🖥️ Hostinger VPS
+- 🚂 Railway (אלטרנטיבה)
+
+---
+
+## 📞 תמיכה
+
+יש שאלות? בעיות?
+- 📖 בדוק את המדריכים המפורטים
+- 🔍 חפש בקוד
+- 📧 פנה למפתח
+
+---
+
+**תיעוד מעודכן: אוקטובר 2024**

@@ -1,157 +1,200 @@
-# 🎉 עמנואל טרכטנברג - אתר הפקת אירועים
+# 🎉 עמנואל טרכטנברג - הפקת אירועים
 
-אתר מקצועי ומהודר להפקת אירועים עם ממשק ניהול מלא וBackend מוכן לפריסה.
+## 📖 תיאור
 
-## ✨ תכונות
+אתר Full Stack מקצועי לניהול הפקת אירועים, כולל:
+- 🌐 **Frontend**: אתר רספונסיבי עם גלריה מרשימה
+- 🔐 **ממשק ניהול**: לוח בקרה מלא למנהל
+- 🖥️ **Backend**: API עם Node.js + Express + PostgreSQL
+- 📸 **ניהול תמונות**: העלאה, עריכה, מחיקה
+- 🔒 **אבטחה**: JWT authentication
 
-### 🌐 **Frontend מלא:**
-- 🎨 **עיצוב מקצועי** - ממשק משתמש מודרני ורספונסיבי
-- 🖼️ **גלריה דינמית** - הצגת תמונות לפי קטגוריות (בשרי, חלבי, כלים)
-- 🔐 **ממשק ניהול** - פאנל מנהל מאובטח לניהול תוכן
-- 📧 **פורמס יצירת קשר** - אינטגרציה עם Formspree
-- 📱 **רספונסיבי** - מותאם לכל המכשירים
-- ⚡ **מהיר** - אופטימיזציה מלאה לביצועים
+---
 
-### 🖥️ **Backend מוכן:**
-- 🚀 **Node.js + Express** - API server מקצועי
-- 🐘 **PostgreSQL** - בסיס נתונים enterprise-grade
-- 🔐 **JWT Authentication** - אבטחה מקצועית
-- 🛡️ **Role-based Access** - הרשאות לפי תפקיד
-- 📊 **RESTful API** - endpoints מלאים
+## 🚀 פריסה מהירה
 
-## 🚀 התחלה מהירה
+### **אפשרות 1: Hostinger VPS (מומלץ - $3.99/חודש)**
+- ✅ **זול ביותר** - $3.99/חודש
+- ✅ **שליטה מלאה** - שרת שלך
+- ✅ **פריסה אוטומטית** - דרך GitHub Actions
+- ✅ **200 תמונות** בקלות
 
-### התקנה
+📖 **מדריך מלא**: [HOSTINGER_DEPLOYMENT_GUIDE.md](HOSTINGER_DEPLOYMENT_GUIDE.md)
+
+### **אפשרות 2: Railway ($20/חודש)**
+- ✅ **ניהול אוטומטי** - אפס תחזוקה
+- ✅ **פריסה בקליק** - חיבור ל-GitHub
+- ⚠️ **יקר יותר** - $20/חודש
+
+📖 **מדריך מלא**: [RAILWAY_DEPLOYMENT_GUIDE.md](RAILWAY_DEPLOYMENT_GUIDE.md)
+
+---
+
+## 💻 הפעלה מקומית (פיתוח)
+
+### **דרישות:**
+- Node.js 18+
+- npm או yarn
+
+### **התקנה:**
 ```bash
+# Clone הפרויקט
+git clone https://github.com/Riky-Shlomowitz/ET_events.git
+cd ET_events
+
+# התקנת Frontend
+npm install
+
+# התקנת Backend
+cd backend
 npm install
 ```
 
-### פיתוח
+### **הפעלה:**
 ```bash
+# Frontend (בטרמינל ראשון)
 npm run dev
+# יפתח ב-http://localhost:5173
+
+# Backend (בטרמינל שני)
+cd backend
+npm run dev
+# יפתח ב-http://localhost:3000
 ```
 
-### בילד לפריסה
-```bash
-npm run build
-```
-
-### תצוגה מקדימה
-```bash
-npm run preview
-```
-
-## 🔐 ממשק הניהול
-
-**כתובת**: `/AdminLogin`
-**פרטי כניסה**:
-- מייל: `admin@trachtenberg.co.il`
-- סיסמה: `Tr@ch2025!`
-
-### תכונות ממשק הניהול:
-- ✅ **ניהול גלריה** - הוספה, עריכה ומחיקה של תמונות
-- ✅ **העלאת קבצים** - תמיכה בתמונות ווידאו
-- ✅ **סטטיסטיקות** - מעקב אחר תוכן האתר
-- ✅ **קטגוריות** - ארגון לפי סוג אירוע
-- ✅ **ממשק בעברית** - תמיכה מלאה ב-RTL
+---
 
 ## 📁 מבנה הפרויקט
 
 ```
-📁 Frontend (React App):
-├── src/
-│   ├── components/ui/       # רכיבי ממשק בסיסיים
-│   ├── lib/localData.js     # מערכת נתונים מקומית
-│   ├── pages/               # דפי האתר
-│   │   ├── EventPlanning.jsx    # דף הבית
-│   │   ├── AdminLogin.jsx       # כניסת מנהל
-│   │   └── AdminDashboard.jsx   # ממשק ניהול
-│   └── utils/               # פונקציות עזר
-├── public/images/           # תמונות סטטיות
-│   ├── logo.png            # לוגו החברה
-│   └── gallery/            # תמונות הגלריה
-└── dist/                   # בילד production
-
-📁 Backend (Node.js API):
-├── src/
-│   ├── controllers/        # לוגיקת API
-│   ├── models/            # מודלי בסיס נתונים
-│   ├── routes/            # נתיבי API
-│   ├── middleware/        # אימות ואבטחה
-│   └── config/            # הגדרות DB
-└── package.json
-
-📚 Documentation:
-├── docs/deployment/       # מדריכי פריסה
-├── docs/database/        # מדריכי בסיס נתונים
-└── docs/development/     # מדריכי פיתוח
+ET_events/
+├── src/                      # Frontend (React + Vite)
+│   ├── pages/                # דפים
+│   │   ├── EventPlanning.jsx # דף ראשי
+│   │   ├── AdminLogin.jsx    # התחברות מנהל
+│   │   └── AdminDashboard.jsx # ממשק ניהול
+│   ├── components/           # קומפוננטות UI
+│   └── lib/                  # ספריות עזר
+│
+├── backend/                  # Backend (Node.js + Express)
+│   ├── src/
+│   │   ├── models/           # מודלים (User, GalleryItem)
+│   │   ├── controllers/      # לוגיקת עסקים
+│   │   ├── routes/           # API routes
+│   │   ├── middleware/       # Authentication
+│   │   └── server.js         # נקודת כניסה
+│   └── package.json
+│
+├── public/images/            # תמונות סטטיות
+├── docs/                     # תיעוד מפורט
+│   ├── deployment/           # מדריכי פריסה
+│   ├── database/             # מדריכי DB
+│   └── development/          # מדריכי פיתוח
+│
+├── .github/workflows/        # GitHub Actions
+└── README.md                 # קובץ זה
 ```
-
-## 🌐 פריסה
-
-📚 **תיעוד מלא**: [docs/README.md](./docs/README.md)
-
-**מדריכים מהירים:**
-- 🚀 [פריסה מהירה ב-5 דקות](./docs/deployment/QUICK_DEPLOY.md)
-- 🖥️ [VPS מלא בהוסטינגר](./docs/deployment/STEP_BY_STEP_DEPLOYMENT.md)
-- 🔐 [הגדרת GitHub Actions](./docs/deployment/GITHUB_SECRETS_SETUP.md)
-
-**פלטפורמות נתמכות**:
-- ✅ **Vercel** (מומלץ ביותר)
-- ✅ **Netlify**
-- ✅ **GitHub Pages**
-- ✅ **VPS/שרת פרטי**
-
-### פריסה מהירה ב-Vercel:
-1. העלה ל-GitHub
-2. חבר ל-Vercel
-3. הגדר: Build Command = `npm run build`, Output Directory = `dist`
-4. Deploy! 🚀
-
-## 🎯 שירותים
-
-- **בריתות** - אירוע קדוש ומרגש עם כל הפרטים
-- **בר/בת מצווה** - חגיגת התבגרות בלתי נשכחת
-- **אירוסין** - ערב רומנטי ומיוחד לחגיגת האהבה
-- **שבע ברכות** - שבוע של שמחה וחגיגות לזוג הטרי
-- **כנסים פרטיים** - אירועים משפחתיים אינטימיים
-- **כנסים עסקיים** - אירועי חברה מקצועיים ומרשימים
-- **רגעים מיוחדים** - כל חגיגה בחיים שראויה לציון מושלם
-
-## 📧 פורמס יצירת קשר
-
-- **שירות**: Formspree
-- **Endpoint**: מוגדר מראש
-- **שדות**: שם, מייל, טלפון, הודעה
-- **הגנה**: מוגן מפני spam
-
-## 💾 מערכת הנתונים
-
-- **אחסון מקומי**: localStorage
-- **גיבוי**: אוטומטי בדפדפן
-- **תמונות**: נשמרות מקומית
-- **ביצועים**: מהיר וללא תלות בשרת
-
-## 📞 יצירת קשר
-
-- **טלפון**: 054-448-3040
-- **מייל**: riky.shlomowitz@gmail.com
-- **WhatsApp**: [צ'אט ישיר](https://wa.me/+972544483040)
-
-## 🔧 טכנולוגיות
-
-- **React 18** - ספרייה לבניית ממשקי משתמש
-- **Vite** - כלי בנייה מהיר
-- **Tailwind CSS** - framework עיצוב
-- **Lucide React** - אייקונים
-- **UUID** - יצירת מזהים ייחודיים
-- **localStorage** - אחסון נתונים מקומי
-
-## 📄 רישיון
-
-כל הזכויות שמורות © 2025 עמנואל טרכטנברג - הפקת אירועים
 
 ---
 
-*נבנה עם ❤️ עבור עמנואל טרכטנברג - הפקת אירועים*
-*"הופכים חלומות לזיכרונות בלתי נשכחים"*
+## 🔐 ממשק ניהול
+
+### **פרטי התחברות:**
+- **URL**: `/AdminLogin`
+- **אימייל**: `admin@trachtenberg.co.il`
+- **סיסמה**: `Tr@ch2025!`
+
+### **תכונות:**
+- ✅ העלאת תמונות וסרטונים
+- ✅ עריכת פריטים בגלריה
+- ✅ מחיקת פריטים
+- ✅ ניהול קטגוריות
+- ✅ סטטיסטיקות
+
+---
+
+## 🛠️ טכנולוגיות
+
+### **Frontend:**
+- ⚛️ React 18
+- ⚡ Vite
+- 🎨 Tailwind CSS
+- 🧩 Shadcn/ui
+- 🔄 React Router DOM
+- 📝 React Hook Form
+
+### **Backend:**
+- 🟢 Node.js 18
+- 🚂 Express 5
+- 🐘 PostgreSQL
+- 🔐 JWT Authentication
+- 📦 Sequelize ORM
+- 📤 Multer (העלאת קבצים)
+
+---
+
+## 📚 תיעוד
+
+### **מדריכי פריסה:**
+- [Hostinger VPS Deployment](HOSTINGER_DEPLOYMENT_GUIDE.md)
+- [Railway Deployment](RAILWAY_DEPLOYMENT_GUIDE.md)
+- [GitHub Actions Setup](docs/deployment/GITHUB_SECRETS_SETUP.md)
+
+### **מדריכי Backend:**
+- [Backend Architecture](docs/database/BACKEND_ARCHITECTURE.md)
+- [Database Setup](docs/database/DATABASE_REAL_SETUP.md)
+
+### **מדריכי פיתוח:**
+- [Fullstack Summary](docs/development/FULLSTACK_SUMMARY.md)
+- [Manual GitHub Upload](docs/development/MANUAL_GITHUB_UPLOAD.md)
+
+---
+
+## 🔧 Scripts
+
+```bash
+# Frontend
+npm run dev          # הרצת dev server
+npm run build        # בנייה לproduction
+npm run preview      # תצוגה מקדימה של build
+
+# Backend
+cd backend
+npm run dev          # הרצת dev server (עם nodemon)
+npm start            # הרצת production server
+```
+
+---
+
+## 🌟 תכונות
+
+### **למבקרים:**
+- 🏠 דף בית מרשים
+- 📸 גלריית תמונות וסרטונים
+- 🎯 פירוט שירותים
+- 📞 טופס יצירת קשר (Formspree)
+
+### **למנהל:**
+- 🔐 התחברות מאובטחת
+- 📤 העלאת תמונות/סרטונים
+- ✏️ עריכת פריטים
+- 🗑️ מחיקת פריטים
+- 📊 סטטיסטיקות
+
+---
+
+## 📞 יצירת קשר
+
+- **אתר**: [לקישור לאתר]
+- **אימייל**: admin@trachtenberg.co.il
+- **GitHub**: [Riky-Shlomowitz/ET_events](https://github.com/Riky-Shlomowitz/ET_events)
+
+---
+
+## 📄 רישיון
+
+This project is private and proprietary.
+
+---
+
+**בנוי עם ❤️ לעמנואל טרכטנברג הפקת אירועים**
