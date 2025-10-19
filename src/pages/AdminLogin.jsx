@@ -116,13 +116,6 @@ export default function AdminLogin() {
             </div>
           </CardContent>
         </Card>
-
-        {/* Demo credentials info */}
-        <div className="mt-6 p-4 bg-blue-900/20 border border-blue-500/30 rounded-lg text-center">
-          <p className="text-blue-200 text-sm font-medium mb-2">פרטי התחברות לדמו:</p>
-          <p className="text-blue-300 text-xs">מייל: admin@trachtenberg.co.il</p>
-          <p className="text-blue-300 text-xs">סיסמה: Tr@ch2025!</p>
-        </div>
       </div>
 
       <style>{`
