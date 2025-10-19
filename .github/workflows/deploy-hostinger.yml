@@ -1,0 +1,229 @@
+name: 🚀 Deploy to Hostinger VPS
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch: # Allow manual trigger
+
+env:
+  NODE_VERSION: '18'
+
+jobs:
+  deploy:
+    name: 🌐 Deploy Fullstack App to Hostinger
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout Repository
+      uses: actions/checkout@v4
+      
+    - name: 🟢 Setup Node.js ${{ env.NODE_VERSION }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+
+    - name: 📦 Install Frontend Dependencies
+      run: |
+        npm ci --prefer-offline --no-audit
+
+    - name: 🏗️ Build Frontend for Production
+      run: |
+        npm run build
+        
+    - name: 📦 Install Backend Dependencies  
+      run: |
+        cd backend
+        npm ci --prefer-offline --no-audit --only=production
+
+    - name: 📊 Build Summary
+      run: |
+        echo "## 📊 Build Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Frontend built successfully" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Backend dependencies installed" >> $GITHUB_STEP_SUMMARY
+        echo "- 🚀 Ready for deployment to Hostinger" >> $GITHUB_STEP_SUMMARY
+
+    - name: 🚀 Deploy to Hostinger VPS
+      uses: appleboy/ssh-action@v0.1.8
+      with:
+        host: ${{ secrets.HOSTINGER_HOST }}
+        username: ${{ secrets.HOSTINGER_USER }}
+        key: ${{ secrets.HOSTINGER_SSH_KEY }}
+        port: ${{ secrets.HOSTINGER_PORT || 22 }}
+        command_timeout: 300s
+        script: |
+          echo "🚀 Starting deployment process..."
+          
+          # Set variables
+          APP_DIR="/var/www/trachtenberg-events"
+          BACKUP_DIR="/var/backups/trachtenberg-events"
+          DATE=$(date +%Y%m%d_%H%M%S)
+          
+          # Create directories if they don't exist
+          mkdir -p $APP_DIR
+          mkdir -p $BACKUP_DIR
+          
+          # Backup current version (if exists)
+          if [ -d "$APP_DIR/current" ]; then
+            echo "📦 Creating backup of current version..."
+            mv $APP_DIR/current $BACKUP_DIR/backup_$DATE
+          fi
+          
+          # Create new deployment directory
+          mkdir -p $APP_DIR/current
+          cd $APP_DIR/current
+          
+          # Clone/Pull latest code
+          if [ -d ".git" ]; then
+            echo "🔄 Pulling latest changes..."
+            git fetch origin
+            git reset --hard origin/main
+          else
+            echo "📥 Cloning repository..."
+            git clone https://github.com/${{ github.repository }}.git .
+          fi
+          
+          # Frontend Setup
+          echo "🌐 Setting up frontend..."
+          
+          # Install dependencies and build
+          npm ci
+          npm run build
+          
+          # Backend Setup
+          echo "🖥️ Setting up backend..."
+          cd backend
+          
+          # Install production dependencies
+          npm ci --only=production
+          
+          # Create/Update .env file
+          cat > .env << EOF
+          # Database Configuration
+          DB_HOST=localhost
+          DB_PORT=5432
+          DB_NAME=trachtenberg_events
+          DB_USER=events_admin
+          DB_PASS=${{ secrets.DB_PASSWORD || 'Tr@ch2025!' }}
+          
+          # Server Configuration
+          PORT=3000
+          NODE_ENV=production
+          FRONTEND_URL=https://${{ secrets.DOMAIN_NAME || secrets.HOSTINGER_HOST }}
+          
+          # JWT Configuration
+          JWT_SECRET=${{ secrets.JWT_SECRET || 'Tr@ch2025_Super_Secret_Key_2025' }}
+          
+          # File Upload Configuration
+          UPLOAD_DIR=/var/www/trachtenberg-events/uploads
+          MAX_FILE_SIZE=10485760
+          EOF
+          
+          # Create uploads directory
+          mkdir -p /var/www/trachtenberg-events/uploads
+          chown -R www-data:www-data /var/www/trachtenberg-events/uploads
+          chmod 755 /var/www/trachtenberg-events/uploads
+          
+          # Database Migration/Sync (if needed)
+          echo "🗃️ Checking database..."
+          # npm run migrate --if-present
+          
+          # Restart Backend with PM2
+          echo "🔄 Restarting backend service..."
+          pm2 stop trachtenberg-backend || echo "Backend was not running"
+          pm2 delete trachtenberg-backend || echo "No existing backend process"
+          pm2 start src/server.js --name "trachtenberg-backend" --node-args="--max-old-space-size=1024"
+          pm2 save
+          
+          # Copy built files to web directory
+          echo "📁 Copying frontend files..."
+          sudo rm -rf /var/www/html/*
+          sudo cp -r ../dist/* /var/www/html/
+          sudo chown -R www-data:www-data /var/www/html/
+          sudo chmod -R 755 /var/www/html/
+          
+          # Test backend health
+          echo "🏥 Testing backend health..."
+          sleep 5
+          if curl -f http://localhost:3000/api/health; then
+            echo "✅ Backend is healthy"
+          else
+            echo "❌ Backend health check failed"
+            exit 1
+          fi
+          
+          # Reload Nginx
+          echo "🔄 Reloading web server..."
+          sudo nginx -t && sudo systemctl reload nginx
+          
+          # Cleanup old backups (keep last 5)
+          echo "🧹 Cleaning up old backups..."
+          ls -t $BACKUP_DIR/ | tail -n +6 | xargs -r -I {} rm -rf $BACKUP_DIR/{}
+          
+          echo "🎉 Deployment completed successfully!"
+          echo "📊 Services status:"
+          pm2 list
+          sudo systemctl status nginx --no-pager -l
+
+    - name: 🧪 Post-Deployment Health Check
+      run: |
+        echo "🏥 Running post-deployment health checks..."
+        
+        # Wait a moment for services to stabilize
+        sleep 10
+        
+        # Check if server responds
+        if curl -f --max-time 30 http://${{ secrets.HOSTINGER_HOST }}/api/health; then
+          echo "✅ API Health Check: PASSED"
+        else
+          echo "❌ API Health Check: FAILED"
+          exit 1
+        fi
+        
+        # Check if frontend loads
+        if curl -f --max-time 30 http://${{ secrets.HOSTINGER_HOST }}/; then
+          echo "✅ Frontend Health Check: PASSED"
+        else
+          echo "❌ Frontend Health Check: FAILED"
+          exit 1
+        fi
+
+    - name: 📊 Deployment Summary
+      if: always()
+      run: |
+        echo "## 🎉 Deployment Complete!" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 📊 Deployment Details:" >> $GITHUB_STEP_SUMMARY
+        echo "- **Server**: ${{ secrets.HOSTINGER_HOST }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Commit**: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Branch**: ${{ github.ref_name }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Deployed by**: ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+        echo "- **Time**: $(date -u)" >> $GITHUB_STEP_SUMMARY
+        echo "" >> $GITHUB_STEP_SUMMARY
+        echo "### 🔗 Links:" >> $GITHUB_STEP_SUMMARY
+        echo "- **Website**: http://${{ secrets.HOSTINGER_HOST }}/" >> $GITHUB_STEP_SUMMARY
+        echo "- **API**: http://${{ secrets.HOSTINGER_HOST }}/api/" >> $GITHUB_STEP_SUMMARY
+        echo "- **Health Check**: http://${{ secrets.HOSTINGER_HOST }}/api/health" >> $GITHUB_STEP_SUMMARY
+        
+        if [ "${{ job.status }}" = "success" ]; then
+          echo "- **Status**: ✅ SUCCESS" >> $GITHUB_STEP_SUMMARY
+        else
+          echo "- **Status**: ❌ FAILED" >> $GITHUB_STEP_SUMMARY
+        fi
+
+  notify:
+    name: 📢 Send Notifications
+    runs-on: ubuntu-latest
+    needs: deploy
+    if: always()
+    
+    steps:
+    - name: 📧 Deployment Notification
+      run: |
+        if [ "${{ needs.deploy.result }}" = "success" ]; then
+          echo "🎉 Deployment succeeded!"
+          echo "Website is live at: http://${{ secrets.HOSTINGER_HOST }}"
+        else
+          echo "❌ Deployment failed!"
+          echo "Check the logs for details."
+        fi

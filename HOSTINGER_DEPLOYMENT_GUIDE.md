@@ -5,11 +5,12 @@
 2. [הכנת השרת](#הכנת-השרת)
 3. [התקנת סביבת הפיתוח](#התקנת-סביבת-הפיתוח)
 4. [הגדרת בסיס הנתונים](#הגדרת-בסיס-הנתונים)
-5. [העלאת האפליקציה](#העלאת-האפליקציה)
-6. [הגדרת Nginx](#הגדרת-nginx)
-7. [הגדרת SSL](#הגדרת-ssl)
-8. [בדיקות ופתרון בעיות](#בדיקות-ופתרון-בעיות)
-9. [תחזוקה שוטפת](#תחזוקה-שוטפת)
+5. [הגדרת GitHub Actions](#הגדרת-github-actions)
+6. [העלאת האפליקציה](#העלאת-האפליקציה)
+7. [הגדרת Nginx](#הגדרת-nginx)
+8. [הגדרת SSL](#הגדרת-ssl)
+9. [בדיקות ופתרון בעיות](#בדיקות-ופתרון-בעיות)
+10. [תחזוקה שוטפת](#תחזוקה-שוטפת)
 
 ---
 
@@ -168,7 +169,58 @@ sudo -u postgres psql -d trachtenberg_events -c "SELECT version();"
 
 ---
 
-## 📁 העלאת האפליקציה
+## 🔄 הגדרת GitHub Actions
+
+### **שלב 1: יצירת SSH Key**
+```bash
+# על השרת Hostinger
+ssh-keygen -t rsa -b 4096 -C "github-deploy"
+# לחץ Enter לכל השאלות
+
+# העתק את המפתח הפרטי
+cat ~/.ssh/id_rsa
+# העתק את כל התוכן - תצטרך אותו ל-GitHub Secrets!
+```
+
+### **שלב 2: הגדרת GitHub Secrets**
+1. לך ל-GitHub Repository: `https://github.com/Riky-Shlomowitz/ET_events`
+2. לחץ על **Settings** → **Secrets and variables** → **Actions**
+3. הוסף את ה-Secrets הבאים:
+
+#### **HOSTINGER_HOST**
+- **Value**: `YOUR_HOSTINGER_IP` (למשל: `123.456.789.012`)
+
+#### **HOSTINGER_USER**
+- **Value**: `root`
+
+#### **HOSTINGER_SSH_KEY**
+- **Value**: `-----BEGIN OPENSSH PRIVATE KEY-----
+YOUR_PRIVATE_KEY_CONTENT_HERE
+-----END OPENSSH PRIVATE KEY-----`
+
+#### **DOMAIN_NAME** (אופציונלי)
+- **Value**: `your-domain.com`
+
+### **שלב 3: הפעלת הפריסה**
+```bash
+# העלה את השינויים
+git add .
+git commit -m "Add GitHub Actions for Hostinger deployment"
+git push origin main
+
+# GitHub Actions יתחיל לרוץ אוטומטית!
+```
+
+### **מה יקרה אוטומטית:**
+- ✅ **כל push** יעדכן את האתר אוטומטית
+- ✅ **בנייה** של Frontend + Backend
+- ✅ **הפעלה מחדש** של השירותים
+- ✅ **בדיקות** שהכל עובד
+- ✅ **התראות** אם יש בעיה
+
+---
+
+## 📁 העלאת האפליקציה (ידנית - אופציונלי)
 
 ### **שלב 1: יצירת תיקיית האפליקציה**
 ```bash
