@@ -313,7 +313,10 @@ export const User = {
 // File upload simulation (for development) or real upload (for production)
 export const UploadFile = async ({ file }) => {
   return withAPIFallback(
-    () => apiClient.uploadFile(file),
+    async () => {
+      const response = await apiClient.uploadFile(file);
+      return { file_url: response.data.file_url };
+    },
     () => {
       // Fallback - use demo images
       return new Promise((resolve, reject) => {

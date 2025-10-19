@@ -32,7 +32,8 @@ class ApiClient {
 
   // Gallery methods
   async getGalleryItems() {
-    return this.request('/gallery');
+    const response = await this.request('/gallery');
+    return response.data || response;
   }
 
   async getGalleryItem(id) {
