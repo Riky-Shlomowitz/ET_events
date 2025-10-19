@@ -264,7 +264,7 @@ export default function EventPlanning() {
       {/* Hero Section */}
       <section id="home" className="relative min-h-screen flex items-center justify-center overflow-hidden">
         <div 
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat animate-hero-zoom"
           style={{
             backgroundImage: 'url("/images/gallery/general-1.jpg")'
           }}
