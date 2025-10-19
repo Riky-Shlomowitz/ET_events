@@ -7,7 +7,10 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start:prod": "concurrently \"npm run build\" \"cd backend && npm start\"",
+    "start:backend": "cd backend && npm start",
+    "dev:full": "concurrently \"npm run dev\" \"npm run start:backend\""
   },
   "dependencies": {
     "@hookform/resolvers": "^4.1.2",
@@ -58,7 +61,8 @@
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^13.0.0",
     "vaul": "^1.1.2",
-    "zod": "^3.24.2"
+    "zod": "^3.24.2",
+    "concurrently": "^9.2.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",

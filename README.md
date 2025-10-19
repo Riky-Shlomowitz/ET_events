@@ -1,15 +1,23 @@
 # 🎉 עמנואל טרכטנברג - אתר הפקת אירועים
 
-אתר מקצועי ומהודר להפקת אירועים עם ממשק ניהול מלא.
+אתר מקצועי ומהודר להפקת אירועים עם ממשק ניהול מלא וBackend מוכן לפריסה.
 
 ## ✨ תכונות
 
+### 🌐 **Frontend מלא:**
 - 🎨 **עיצוב מקצועי** - ממשק משתמש מודרני ורספונסיבי
 - 🖼️ **גלריה דינמית** - הצגת תמונות לפי קטגוריות (בשרי, חלבי, כלים)
 - 🔐 **ממשק ניהול** - פאנל מנהל מאובטח לניהול תוכן
 - 📧 **פורמס יצירת קשר** - אינטגרציה עם Formspree
 - 📱 **רספונסיבי** - מותאם לכל המכשירים
 - ⚡ **מהיר** - אופטימיזציה מלאה לביצועים
+
+### 🖥️ **Backend מוכן:**
+- 🚀 **Node.js + Express** - API server מקצועי
+- 🐘 **PostgreSQL** - בסיס נתונים enterprise-grade
+- 🔐 **JWT Authentication** - אבטחה מקצועית
+- 🛡️ **Role-based Access** - הרשאות לפי תפקיד
+- 📊 **RESTful API** - endpoints מלאים
 
 ## 🚀 התחלה מהירה
 
@@ -50,23 +58,43 @@ npm run preview
 ## 📁 מבנה הפרויקט
 
 ```
-src/
-├── components/          # רכיבי UI
-│   └── ui/             # רכיבי ממשק בסיסיים
-├── lib/                # מערכת נתונים מקומית
-│   └── localData.js    # ניהול נתונים ב-localStorage
-├── pages/              # דפי האתר
-│   ├── EventPlanning.jsx    # דף הבית
-│   ├── AdminLogin.jsx       # כניסת מנהל
-│   └── AdminDashboard.jsx   # ממשק ניהול
-└── public/images/      # תמונות הגלריה
-    ├── logo.png        # לוגו החברה
-    └── gallery/        # תמונות לפי קטגוריות
+📁 Frontend (React App):
+├── src/
+│   ├── components/ui/       # רכיבי ממשק בסיסיים
+│   ├── lib/localData.js     # מערכת נתונים מקומית
+│   ├── pages/               # דפי האתר
+│   │   ├── EventPlanning.jsx    # דף הבית
+│   │   ├── AdminLogin.jsx       # כניסת מנהל
+│   │   └── AdminDashboard.jsx   # ממשק ניהול
+│   └── utils/               # פונקציות עזר
+├── public/images/           # תמונות סטטיות
+│   ├── logo.png            # לוגו החברה
+│   └── gallery/            # תמונות הגלריה
+└── dist/                   # בילד production
+
+📁 Backend (Node.js API):
+├── src/
+│   ├── controllers/        # לוגיקת API
+│   ├── models/            # מודלי בסיס נתונים
+│   ├── routes/            # נתיבי API
+│   ├── middleware/        # אימות ואבטחה
+│   └── config/            # הגדרות DB
+└── package.json
+
+📚 Documentation:
+├── docs/deployment/       # מדריכי פריסה
+├── docs/database/        # מדריכי בסיס נתונים
+└── docs/development/     # מדריכי פיתוח
 ```
 
 ## 🌐 פריסה
 
-ראה את המדריך המפורט ב-[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)
+📚 **תיעוד מלא**: [docs/README.md](./docs/README.md)
+
+**מדריכים מהירים:**
+- 🚀 [פריסה מהירה ב-5 דקות](./docs/deployment/QUICK_DEPLOY.md)
+- 🖥️ [VPS מלא בהוסטינגר](./docs/deployment/STEP_BY_STEP_DEPLOYMENT.md)
+- 🔐 [הגדרת GitHub Actions](./docs/deployment/GITHUB_SECRETS_SETUP.md)
 
 **פלטפורמות נתמכות**:
 - ✅ **Vercel** (מומלץ ביותר)

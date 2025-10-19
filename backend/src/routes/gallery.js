@@ -2,6 +2,7 @@ const express = require('express');
 const galleryController = require('../controllers/galleryController');
 const auth = require('../middleware/auth');
 const adminAuth = require('../middleware/adminAuth');
+const upload = require('../middleware/upload');
 
 const router = express.Router();
 
@@ -14,5 +15,6 @@ router.get('/:id', galleryController.getById);
 router.post('/', auth, adminAuth, galleryController.create);
 router.put('/:id', auth, adminAuth, galleryController.update);
 router.delete('/:id', auth, adminAuth, galleryController.delete);
+router.post('/upload', auth, adminAuth, upload.single('file'), galleryController.uploadFile);
 
 module.exports = router;

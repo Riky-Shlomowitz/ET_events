@@ -382,7 +382,13 @@ export default function AdminDashboard() {
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
                   <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
                   <h3 className="text-lg font-medium mb-2">העלו תמונות ווידאו</h3>
-                  <p className="text-gray-600 mb-4">גררו קבצים לכאן או לחצו לבחירה</p>
+                  <p className="text-gray-600 mb-2">גררו קבצים לכאן או לחצו לבחירה</p>
+                  <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                    <p className="text-blue-800 text-sm">
+                      💡 <strong>הערה:</strong> בגרסה הנוכחית, העלאת קבצים תציג תמונה אקראית מהגלריה הקיימת. 
+                      לעבודה מלאה עם העלאת קבצים אמיתית, יש צורך בשרת עם בסיס נתונים.
+                    </p>
+                  </div>
                   
                   <input
                     type="file"
@@ -569,6 +575,11 @@ export default function AdminDashboard() {
                 {!editingItem.id && (
                   <div>
                     <label className="block text-sm font-medium mb-2">קובץ</label>
+                    <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-2 mb-3">
+                      <p className="text-yellow-800 text-xs">
+                        💡 העלאה תבחר תמונה אקראית מהגלריה הקיימת (דמו)
+                      </p>
+                    </div>
                     <input
                       type="file"
                       accept="image/*,video/*"

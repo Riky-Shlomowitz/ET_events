@@ -26,17 +26,17 @@ const galleryFilters = [
 const services = [
   {
     title: 'בריתות',
-    description: 'אירוע קדוש ומרגש עם כל הפרטים הדתיים והחילוניים',
+    description: 'אירוע קדוש ומרגש עם כל הפרטים',
     icon: Star
   },
   {
     title: 'בר/בת מצווה',
-    description: 'חגיגת התבגרות בלתי נשכחת לילד ולמשפחה',
+    description: 'חגיגת בלתי נשכחת לילד ולמשפחה',
     icon: Users
   },
   {
     title: 'אירוסין',
-    description: 'ערב רומנטי ומיוחד לחגיגת האהבה',
+    description: 'ערב מיוחד  ',
     icon: Heart
   },
   {
@@ -46,7 +46,7 @@ const services = [
   },
   {
     title: 'כנסים פרטיים',
-    description: 'אירועים משפחתיים אינטימיים ומיוחדים',
+    description: 'אירועים משפחתיים ומיוחדים',
     icon: Users
   },
   {

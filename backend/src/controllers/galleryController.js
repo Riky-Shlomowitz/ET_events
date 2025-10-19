@@ -1,5 +1,6 @@
 const GalleryItem = require('../models/GalleryItem');
 const { Op } = require('sequelize');
+const path = require('path');
 
 class GalleryController {
   // GET /api/gallery
@@ -160,6 +161,40 @@ class GalleryController {
       res.status(500).json({
         success: false,
         message: 'שגיאה במחיקת הפריט',
+        error: process.env.NODE_ENV === 'development' ? error.message : undefined
+      });
+    }
+  }
+
+  // POST /api/gallery/upload
+  async uploadFile(req, res) {
+    try {
+      if (!req.file) {
+        return res.status(400).json({
+          success: false,
+          message: 'לא נבחר קובץ להעלאה'
+        });
+      }
+
+      // Generate file URL
+      const fileUrl = `/uploads/${req.file.filename}`;
+      
+      res.json({
+        success: true,
+        message: 'קובץ הועלה בהצלחה',
+        data: {
+          file_url: fileUrl,
+          filename: req.file.filename,
+          originalname: req.file.originalname,
+          mimetype: req.file.mimetype,
+          size: req.file.size
+        }
+      });
+    } catch (error) {
+      console.error('Error in uploadFile:', error);
+      res.status(500).json({
+        success: false,
+        message: 'שגיאה בהעלאת הקובץ',
         error: process.env.NODE_ENV === 'development' ? error.message : undefined
       });
     }

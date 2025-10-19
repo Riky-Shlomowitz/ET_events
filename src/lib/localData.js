@@ -1,7 +1,11 @@
-// Local data management system to replace Base44
+// Local data management system for Trachtenberg Events
 import { v4 as uuidv4 } from 'uuid';
+import apiClient from './apiClient';
 
-// Storage keys
+// Check if we're in development mode (use localStorage) or production (use API)
+const isDevelopment = import.meta.env.DEV;
+
+// Storage keys for localStorage fallback
 const GALLERY_ITEMS_KEY = 'gallery_items';
 const USER_SESSION_KEY = 'user_session';
 
@@ -109,185 +113,272 @@ const defaultGalleryItems = [
 export const GalleryItem = {
   // List all gallery items with optional sorting
   async list(sortBy = '-created_date') {
-    try {
-      const items = JSON.parse(localStorage.getItem(GALLERY_ITEMS_KEY)) || [];
-      
-      // If no items in storage, initialize with defaults
-      if (items.length === 0) {
-        localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(defaultGalleryItems));
+    if (isDevelopment) {
+      // Use localStorage in development
+      try {
+        const items = JSON.parse(localStorage.getItem(GALLERY_ITEMS_KEY)) || [];
+        
+        if (items.length === 0) {
+          localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(defaultGalleryItems));
+          return [...defaultGalleryItems];
+        }
+        
+        const sortedItems = [...items].sort((a, b) => {
+          const field = sortBy.startsWith('-') ? sortBy.slice(1) : sortBy;
+          const direction = sortBy.startsWith('-') ? -1 : 1;
+          
+          if (field === 'created_date') {
+            return direction * (new Date(b[field]) - new Date(a[field]));
+          }
+          
+          if (typeof a[field] === 'string') {
+            return direction * a[field].localeCompare(b[field]);
+          }
+          
+          return direction * (a[field] - b[field]);
+        });
+        
+        return sortedItems;
+      } catch (error) {
+        console.error('Error loading gallery items:', error);
         return [...defaultGalleryItems];
       }
-      
-      // Sort items
-      const sortedItems = [...items].sort((a, b) => {
-        const field = sortBy.startsWith('-') ? sortBy.slice(1) : sortBy;
-        const direction = sortBy.startsWith('-') ? -1 : 1;
-        
-        if (field === 'created_date') {
-          return direction * (new Date(b[field]) - new Date(a[field]));
-        }
-        
-        if (typeof a[field] === 'string') {
-          return direction * a[field].localeCompare(b[field]);
-        }
-        
-        return direction * (a[field] - b[field]);
-      });
-      
-      return sortedItems;
-    } catch (error) {
-      console.error('Error loading gallery items:', error);
-      return [...defaultGalleryItems];
+    } else {
+      // Use API in production
+      try {
+        return await apiClient.getGalleryItems();
+      } catch (error) {
+        console.error('Error loading gallery items from API:', error);
+        return [];
+      }
     }
   },
 
   // Get single item by ID
   async get(id) {
-    const items = await this.list();
-    return items.find(item => item.id === id);
+    if (isDevelopment) {
+      const items = await this.list();
+      return items.find(item => item.id === id);
+    } else {
+      try {
+        return await apiClient.getGalleryItem(id);
+      } catch (error) {
+        console.error('Error getting gallery item:', error);
+        return null;
+      }
+    }
   },
 
   // Create new gallery item
   async create(itemData) {
-    try {
-      const items = await this.list();
-      const newItem = {
-        id: uuidv4(),
-        ...itemData,
-        created_date: new Date().toISOString(),
-        updated_date: new Date().toISOString()
-      };
-      
-      items.push(newItem);
-      localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(items));
-      return newItem;
-    } catch (error) {
-      console.error('Error creating gallery item:', error);
-      throw error;
+    if (isDevelopment) {
+      try {
+        const items = await this.list();
+        const newItem = {
+          id: uuidv4(),
+          ...itemData,
+          created_date: new Date().toISOString(),
+          updated_date: new Date().toISOString()
+        };
+        
+        items.push(newItem);
+        localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(items));
+        return newItem;
+      } catch (error) {
+        console.error('Error creating gallery item:', error);
+        throw error;
+      }
+    } else {
+      try {
+        return await apiClient.createGalleryItem(itemData);
+      } catch (error) {
+        console.error('Error creating gallery item via API:', error);
+        throw error;
+      }
     }
   },
 
   // Update existing gallery item
   async update(id, updateData) {
-    try {
-      const items = await this.list();
-      const itemIndex = items.findIndex(item => item.id === id);
-      
-      if (itemIndex === -1) {
-        throw new Error('Item not found');
+    if (isDevelopment) {
+      try {
+        const items = await this.list();
+        const itemIndex = items.findIndex(item => item.id === id);
+        
+        if (itemIndex === -1) {
+          throw new Error('Item not found');
+        }
+        
+        items[itemIndex] = {
+          ...items[itemIndex],
+          ...updateData,
+          updated_date: new Date().toISOString()
+        };
+        
+        localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(items));
+        return items[itemIndex];
+      } catch (error) {
+        console.error('Error updating gallery item:', error);
+        throw error;
       }
-      
-      items[itemIndex] = {
-        ...items[itemIndex],
-        ...updateData,
-        updated_date: new Date().toISOString()
-      };
-      
-      localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(items));
-      return items[itemIndex];
-    } catch (error) {
-      console.error('Error updating gallery item:', error);
-      throw error;
+    } else {
+      try {
+        return await apiClient.updateGalleryItem(id, updateData);
+      } catch (error) {
+        console.error('Error updating gallery item via API:', error);
+        throw error;
+      }
     }
   },
 
   // Delete gallery item
   async delete(id) {
-    try {
-      const items = await this.list();
-      const filteredItems = items.filter(item => item.id !== id);
-      localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(filteredItems));
-      return true;
-    } catch (error) {
-      console.error('Error deleting gallery item:', error);
-      throw error;
+    if (isDevelopment) {
+      try {
+        const items = await this.list();
+        const filteredItems = items.filter(item => item.id !== id);
+        localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(filteredItems));
+        return true;
+      } catch (error) {
+        console.error('Error deleting gallery item:', error);
+        throw error;
+      }
+    } else {
+      try {
+        await apiClient.deleteGalleryItem(id);
+        return true;
+      } catch (error) {
+        console.error('Error deleting gallery item via API:', error);
+        throw error;
+      }
     }
   }
 };
 
-// User/Auth management (simple local implementation)
+// User/Auth management
 export const User = {
-  // Simple login check
+  // Login
   async login(email, password) {
-    // Simple hardcoded admin credentials
-    if (email === 'admin@trachtenberg.co.il' && password === 'Tr@ch2025!') {
-      const session = {
-        user: { email, role: 'admin' },
-        token: 'local-admin-token',
-        expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours
-      };
-      localStorage.setItem(USER_SESSION_KEY, JSON.stringify(session));
-      return session;
+    if (isDevelopment) {
+      // Simple hardcoded admin credentials for development
+      if (email === 'admin@trachtenberg.co.il' && password === 'Tr@ch2025!') {
+        const session = {
+          user: { email, role: 'admin' },
+          token: 'local-admin-token',
+          expires: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
+        };
+        localStorage.setItem(USER_SESSION_KEY, JSON.stringify(session));
+        return session;
+      }
+      throw new Error('Invalid credentials');
+    } else {
+      try {
+        return await apiClient.login(email, password);
+      } catch (error) {
+        console.error('Error logging in via API:', error);
+        throw error;
+      }
     }
-    throw new Error('Invalid credentials');
   },
 
   // Check if user is authenticated
   async isAuthenticated() {
-    try {
-      const session = JSON.parse(localStorage.getItem(USER_SESSION_KEY));
-      if (!session || new Date(session.expires) < new Date()) {
+    if (isDevelopment) {
+      try {
+        const session = JSON.parse(localStorage.getItem(USER_SESSION_KEY));
+        if (!session || new Date(session.expires) < new Date()) {
+          return false;
+        }
+        return true;
+      } catch {
         return false;
       }
-      return true;
-    } catch {
-      return false;
+    } else {
+      try {
+        await apiClient.getCurrentUser();
+        return true;
+      } catch {
+        return false;
+      }
     }
   },
 
   // Logout
   async logout() {
-    localStorage.removeItem(USER_SESSION_KEY);
-    return true;
+    if (isDevelopment) {
+      localStorage.removeItem(USER_SESSION_KEY);
+      return true;
+    } else {
+      try {
+        await apiClient.logout();
+        return true;
+      } catch (error) {
+        console.error('Error logging out via API:', error);
+        return false;
+      }
+    }
   }
 };
 
-// File upload simulation (stores base64 locally)
+// File upload simulation (for development) or real upload (for production)
 export const UploadFile = async ({ file }) => {
-  return new Promise((resolve, reject) => {
-    if (!file) {
-      reject(new Error('No file provided'));
-      return;
-    }
+  if (isDevelopment) {
+    // Development mode - use object URLs
+    return new Promise((resolve, reject) => {
+      if (!file) {
+        reject(new Error('No file provided'));
+        return;
+      }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      // In a real app, this would upload to a server
-      // For now, we'll create a local URL
-      const fileId = uuidv4();
-      const fileUrl = reader.result; // This will be a data URL
-      
-      // Store file data in localStorage (for demo purposes)
-      const fileData = {
-        id: fileId,
-        name: file.name,
-        type: file.type,
-        size: file.size,
-        url: fileUrl,
-        uploaded_at: new Date().toISOString()
-      };
-      
-      // Store in a files collection
-      const files = JSON.parse(localStorage.getItem('uploaded_files') || '[]');
-      files.push(fileData);
-      localStorage.setItem('uploaded_files', JSON.stringify(files));
-      
-      resolve({ file_url: fileUrl });
-    };
-    
-    reader.onerror = () => {
-      reject(new Error('Failed to read file'));
-    };
-    
-    reader.readAsDataURL(file);
-  });
+      try {
+        const objectUrl = URL.createObjectURL(file);
+        const fileId = uuidv4();
+        
+        const fileData = {
+          id: fileId,
+          name: file.name,
+          type: file.type,
+          size: file.size,
+          objectUrl: objectUrl,
+          uploaded_at: new Date().toISOString()
+        };
+        
+        const files = JSON.parse(localStorage.getItem('uploaded_files') || '[]');
+        files.push(fileData);
+        localStorage.setItem('uploaded_files', JSON.stringify(files));
+        
+        const demoUrls = [
+          '/images/gallery/general-1.jpg',
+          '/images/gallery/general-2.jpg',
+          '/images/gallery/besari-1.jpg',
+          '/images/gallery/halavi-1.jpg',
+          '/images/gallery/kelim-1.jpg'
+        ];
+        
+        const randomUrl = demoUrls[Math.floor(Math.random() * demoUrls.length)];
+        resolve({ file_url: randomUrl });
+      } catch (error) {
+        reject(new Error('Failed to process file'));
+      }
+    });
+  } else {
+    // Production mode - use real API upload
+    try {
+      return await apiClient.uploadFile(file);
+    } catch (error) {
+      console.error('Error uploading file via API:', error);
+      throw error;
+    }
+  }
 };
 
-// Initialize default data if needed
+// Initialize default data if needed (development only)
 export const initializeDefaultData = () => {
-  const existingItems = localStorage.getItem(GALLERY_ITEMS_KEY);
-  if (!existingItems) {
-    localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(defaultGalleryItems));
+  if (isDevelopment) {
+    const existingItems = localStorage.getItem(GALLERY_ITEMS_KEY);
+    if (!existingItems) {
+      localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(defaultGalleryItems));
+    }
   }
 };
 
