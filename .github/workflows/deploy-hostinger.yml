@@ -110,7 +110,7 @@ jobs:
           # Server Configuration
           PORT=3000
           NODE_ENV=production
-          FRONTEND_URL=https://${{ secrets.DOMAIN_NAME || secrets.HOSTINGER_HOST }}
+          FRONTEND_URL=http://${{ secrets.HOSTINGER_HOST }}
           
           # JWT Configuration
           JWT_SECRET=${{ secrets.JWT_SECRET || 'Tr@ch2025_Super_Secret_Key_2025' }}
