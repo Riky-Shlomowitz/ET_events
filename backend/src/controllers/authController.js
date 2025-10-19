@@ -1,5 +1,16 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const { sequelize } = require('../config/database');
+
+// Check if database is connected
+async function isDatabaseConnected() {
+  try {
+    await sequelize.authenticate();
+    return true;
+  } catch {
+    return false;
+  }
+}
 
 class AuthController {
   // POST /api/auth/login
@@ -11,6 +22,16 @@ class AuthController {
         return res.status(400).json({
           success: false,
           message: 'נדרש מייל וסיסמה'
+        });
+      }
+
+      // Check DB connection first
+      const dbConnected = await isDatabaseConnected();
+      if (!dbConnected) {
+        // Return error when DB not connected for login
+        return res.status(503).json({
+          success: false,
+          message: 'שירות בסיס הנתונים לא זמין'
         });
       }
 
