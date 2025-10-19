@@ -21,10 +21,10 @@ jobs:
       uses: actions/setup-node@v4
       with:
         node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm'
 
     - name: 📦 Install Frontend Dependencies
       run: |
+        rm -rf node_modules package-lock.json
         npm install
 
     - name: 🏗️ Build Frontend for Production
