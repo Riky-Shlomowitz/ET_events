@@ -25,16 +25,16 @@ jobs:
 
     - name: 📦 Install Frontend Dependencies
       run: |
-        npm ci --prefer-offline --no-audit
+        npm install
 
     - name: 🏗️ Build Frontend for Production
       run: |
         npm run build
         
-    - name: 📦 Install Backend Dependencies  
+    - name: 📦 Install Backend Dependencies
       run: |
         cd backend
-        npm ci --prefer-offline --no-audit --only=production
+        npm install --only=production
 
     - name: 📊 Build Summary
       run: |
@@ -87,7 +87,7 @@ jobs:
           echo "🌐 Setting up frontend..."
           
           # Install dependencies and build
-          npm ci
+          npm install
           npm run build
           
           # Backend Setup
@@ -95,7 +95,7 @@ jobs:
           cd backend
           
           # Install production dependencies
-          npm ci --only=production
+          npm install --only=production
           
           # Create/Update .env file
           cat > .env << EOF
