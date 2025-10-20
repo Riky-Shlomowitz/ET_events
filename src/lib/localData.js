@@ -10,105 +10,8 @@ let apiCheckDone = false;
 const GALLERY_ITEMS_KEY = 'gallery_items';
 const USER_SESSION_KEY = 'user_session';
 
-// Default gallery items with local images
-const defaultGalleryItems = [
-  {
-    id: uuidv4(),
-    title: 'אירוע בשרי מפואר',
-    description: 'אירוע בשרי יוקרתי עם עיצוב מרשים',
-    category: 'besari',
-    media_type: 'image',
-    file_url: '/images/gallery/besari-1.jpg',
-    is_featured: true,
-    status: 'active',
-    sort_order: 1,
-    created_date: new Date().toISOString()
-  },
-  {
-    id: uuidv4(),
-    title: 'חגיגה חלבית אלגנטית',
-    description: 'אירוע חלבי עם עיצוב עדין ומרשים',
-    category: 'halavi',
-    media_type: 'image',
-    file_url: '/images/gallery/halavi-1.jpg',
-    is_featured: true,
-    status: 'active',
-    sort_order: 2,
-    created_date: new Date().toISOString()
-  },
-  {
-    id: uuidv4(),
-    title: 'עיצוב שולחן מרשים',
-    description: 'כלים וחמרים איכותיים לעיצוב מושלם',
-    category: 'kelim',
-    media_type: 'image',
-    file_url: '/images/gallery/kelim-1.jpg',
-    is_featured: false,
-    status: 'active',
-    sort_order: 3,
-    created_date: new Date().toISOString()
-  },
-  {
-    id: uuidv4(),
-    title: 'ערב גאלה יוקרתי',
-    description: 'אירוע בשרי גדול עם כל הפרטים',
-    category: 'besari',
-    media_type: 'image',
-    file_url: '/images/gallery/besari-2.jpg',
-    is_featured: false,
-    status: 'active',
-    sort_order: 4,
-    created_date: new Date().toISOString()
-  },
-  {
-    id: uuidv4(),
-    title: 'חתונה רומנטית',
-    description: 'חתונה חלבית עם אווירה רומנטית',
-    category: 'halavi',
-    media_type: 'image',
-    file_url: '/images/gallery/halavi-2.jpg',
-    is_featured: false,
-    status: 'active',
-    sort_order: 5,
-    created_date: new Date().toISOString()
-  },
-  {
-    id: uuidv4(),
-    title: 'כלים מעוצבים',
-    description: 'מגוון כלים מעוצבים לאירועים מיוחדים',
-    category: 'kelim',
-    media_type: 'image',
-    file_url: '/images/gallery/kelim-2.jpg',
-    is_featured: false,
-    status: 'active',
-    sort_order: 6,
-    created_date: new Date().toISOString()
-  },
-  {
-    id: uuidv4(),
-    title: 'בר מצווה מרשים',
-    description: 'חגיגת בר מצווה עם עיצוב מיוחד',
-    category: 'general',
-    media_type: 'image',
-    file_url: '/images/gallery/general-1.jpg',
-    is_featured: false,
-    status: 'active',
-    sort_order: 7,
-    created_date: new Date().toISOString()
-  },
-  {
-    id: uuidv4(),
-    title: 'אירוע עסקי מקצועי',
-    description: 'כנס עסקי עם הפקה מקצועית',
-    category: 'general',
-    media_type: 'image',
-    file_url: '/images/gallery/general-2.jpg',
-    is_featured: false,
-    status: 'active',
-    sort_order: 8,
-    created_date: new Date().toISOString()
-  }
-];
+// Default gallery items - empty by default, only show uploaded images
+const defaultGalleryItems = [];
 
 // Helper function to check API availability and fallback to localStorage
 async function withAPIFallback(apiCall, localStorageFallback) {
@@ -362,10 +265,8 @@ export const UploadFile = async ({ file }) => {
 
 // Initialize default data if needed
 export const initializeDefaultData = () => {
-  const existingItems = localStorage.getItem(GALLERY_ITEMS_KEY);
-  if (!existingItems) {
-    localStorage.setItem(GALLERY_ITEMS_KEY, JSON.stringify(defaultGalleryItems));
-  }
+  // Don't initialize demo data - only use API or empty state
+  // This prevents demo images from showing in production
 };
 
 // Call initialization
