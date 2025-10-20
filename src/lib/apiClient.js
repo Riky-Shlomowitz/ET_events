@@ -1,11 +1,5 @@
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/api';
 
-console.log('🔧 API Configuration:', {
-  VITE_API_URL: import.meta.env.VITE_API_URL,
-  API_BASE_URL,
-  mode: import.meta.env.MODE
-});
-
 class ApiClient {
   async request(endpoint, options = {}) {
     const url = `${API_BASE_URL}${endpoint}`;
@@ -75,9 +69,6 @@ class ApiClient {
     const token = response.data?.token || response.token;
     if (token) {
       localStorage.setItem('auth_token', token);
-      console.log('✅ Token saved:', token.substring(0, 20) + '...');
-    } else {
-      console.error('❌ No token in response:', response);
     }
 
     return response;

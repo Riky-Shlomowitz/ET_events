@@ -133,9 +133,8 @@ export default function EventPlanning() {
       }
     } catch (err) {
       // On error, use mock data
-      console.error('Gallery load error:', err);
-      const filteredItems = galleryFilter === 'all' 
-        ? mockGalleryItems 
+      const filteredItems = galleryFilter === 'all'
+        ? mockGalleryItems
         : mockGalleryItems.filter(item => item.category === galleryFilter);
       setGalleryItems(filteredItems);
     }
@@ -602,18 +601,16 @@ export default function EventPlanning() {
           <div className="relative max-w-4xl max-h-full">
             {currentMedia.type === 'video' ? (
               <video
-                src={currentMedia.url}
                 controls
                 autoPlay
+                playsInline
+                preload="auto"
                 className="max-w-full max-h-full object-contain"
                 onClick={(e) => e.stopPropagation()}
-                onError={(e) => {
-                  console.error('Video failed to load:', currentMedia.url);
-                  console.error('Error details:', e);
-                }}
               >
                 <source src={currentMedia.url} type="video/mp4" />
                 <source src={currentMedia.url} type="video/webm" />
+                <source src={currentMedia.url} type="video/ogg" />
                 הדפדפן שלך לא תומך בהצגת וידאו
               </video>
             ) : (

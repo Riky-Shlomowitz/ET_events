@@ -128,7 +128,7 @@ async function startServer() {
     const dbConnected = await testConnection();
     if (!dbConnected) {
       console.log('⚠️  Database connection failed, but server will start anyway');
-      console.log('💡 Make sure PostgreSQL is running and credentials are correct');
+      console.log('💡 Make sure PostgreSQL is running and configuration is correct');
     }
 
     // Sync database models (development only)
@@ -151,12 +151,6 @@ async function startServer() {
       console.log(`📖 API Docs: http://localhost:${PORT}/api`);
       console.log(`🏥 Health Check: http://localhost:${PORT}/api/health`);
       console.log(`🔐 Environment: ${process.env.NODE_ENV || 'development'}`);
-      
-      if (process.env.NODE_ENV === 'development') {
-        console.log('\n📋 Default Admin Credentials:');
-        console.log('   Email: admin@trachtenberg.co.il');
-        console.log('   Password: Tr@ch2025!');
-      }
     });
   } catch (error) {
     console.error('❌ Failed to start server:', error);
