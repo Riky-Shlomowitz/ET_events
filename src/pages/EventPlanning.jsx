@@ -601,12 +601,21 @@ export default function EventPlanning() {
         >
           <div className="relative max-w-4xl max-h-full">
             {currentMedia.type === 'video' ? (
-              <video 
+              <video
                 src={currentMedia.url}
                 controls
+                autoPlay
                 className="max-w-full max-h-full object-contain"
                 onClick={(e) => e.stopPropagation()}
-              />
+                onError={(e) => {
+                  console.error('Video failed to load:', currentMedia.url);
+                  console.error('Error details:', e);
+                }}
+              >
+                <source src={currentMedia.url} type="video/mp4" />
+                <source src={currentMedia.url} type="video/webm" />
+                הדפדפן שלך לא תומך בהצגת וידאו
+              </video>
             ) : (
               <img 
                 src={currentMedia.url}
@@ -620,14 +629,20 @@ export default function EventPlanning() {
             {galleryItems.length > 1 && (
               <>
                 <Button
-                  onClick={prevMedia}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    prevMedia();
+                  }}
                   className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-all duration-300"
                 >
                   <ChevronRight className="w-6 h-6" />
                 </Button>
-                
+
                 <Button
-                  onClick={nextMedia}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    nextMedia();
+                  }}
                   className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-black/50 hover:bg-black/70 text-white p-3 rounded-full transition-all duration-300"
                 >
                   <ChevronLeft className="w-6 h-6" />
