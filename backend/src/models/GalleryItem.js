@@ -33,15 +33,12 @@ const GalleryItem = sequelize.define('GalleryItem', {
     type: DataTypes.STRING,
     allowNull: false,
     validate: {
-      isUrl: true
+      notEmpty: true
     }
   },
   thumbnail_url: {
     type: DataTypes.STRING,
-    allowNull: true,
-    validate: {
-      isUrl: true
-    }
+    allowNull: true
   },
   is_featured: {
     type: DataTypes.BOOLEAN,
