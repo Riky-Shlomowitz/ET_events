@@ -70,11 +70,16 @@ class ApiClient {
       method: 'POST',
       body: JSON.stringify({ email, password }),
     });
-    
-    if (response.token) {
-      localStorage.setItem('auth_token', response.token);
+
+    // Server returns token in response.data.token
+    const token = response.data?.token || response.token;
+    if (token) {
+      localStorage.setItem('auth_token', token);
+      console.log('✅ Token saved:', token.substring(0, 20) + '...');
+    } else {
+      console.error('❌ No token in response:', response);
     }
-    
+
     return response;
   }
 
