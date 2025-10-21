@@ -274,9 +274,9 @@ export default function EventPlanning() {
         <div className="relative z-10 text-center text-white px-4 max-w-5xl mx-auto">
           {/* Logo Large */}
           <div className="mb-8 animate-fade-in-up">
-            <img 
-              src="https://res.cloudinary.com/dybudpqn7/image/upload/v1757426229/ChatGPT_Image_Sep_9_2025_12_55_22_PM_chr5nw.png" 
-              alt="עמנואל טרכטנברג הפקת אירועים" 
+            <img
+              src="/images/logo.png"
+              alt="עמנואל טרכטנברג הפקת אירועים"
               className="h-64 md:h-80 lg:h-96 w-auto mx-auto mb-6"
             />
           </div>

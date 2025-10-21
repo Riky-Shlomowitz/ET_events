@@ -29,8 +29,25 @@ app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'combined'));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
-// Serve static files (uploads)
-app.use('/uploads', express.static('uploads'));
+// Serve static files (uploads) with proper MIME types
+app.use('/uploads', (req, res, next) => {
+  // Set proper Content-Type for video files
+  const ext = req.url.split('.').pop().toLowerCase();
+  const videoTypes = {
+    'mp4': 'video/mp4',
+    'webm': 'video/webm',
+    'mov': 'video/quicktime',
+    'avi': 'video/x-msvideo',
+    'mpeg': 'video/mpeg'
+  };
+
+  if (videoTypes[ext]) {
+    res.setHeader('Content-Type', videoTypes[ext]);
+    res.setHeader('Accept-Ranges', 'bytes'); // Important for video seeking
+  }
+
+  next();
+}, express.static('uploads'));
 
 // API Routes
 app.use('/api/gallery', galleryRoutes);
