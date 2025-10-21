@@ -25,9 +25,9 @@ app.use(cors({
 // Logging middleware
 app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'combined'));
 
-// Body parsing middleware
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+// Body parsing middleware - increased for video uploads
+app.use(express.json({ limit: '100mb' }));
+app.use(express.urlencoded({ extended: true, limit: '100mb' }));
 
 // Serve static files (uploads) with proper MIME types
 app.use('/uploads', (req, res, next) => {
