@@ -92,9 +92,13 @@ export default function AdminDashboard() {
         );
 
         const { file_url } = await UploadFile({ file });
-        
+
         // Create gallery item
-        const mediaType = file.type.startsWith('video/') ? 'video' : 'image';
+        // Check both MIME type and file extension
+        const videoExtensions = ['mp4', 'mov', 'avi', 'webm', 'mpeg', 'mpg'];
+        const fileExtension = file.name.split('.').pop().toLowerCase();
+        const isVideo = file.type.startsWith('video/') || videoExtensions.includes(fileExtension);
+        const mediaType = isVideo ? 'video' : 'image';
         const newItem = {
           title: file.name.split('.')[0],
           description: '',
@@ -579,10 +583,16 @@ export default function AdminDashboard() {
                             // Indicate upload is happening
                             showAlert('info', 'מעלה קובץ...');
                             const { file_url } = await UploadFile({ file });
+
+                            // Check both MIME type and file extension
+                            const videoExtensions = ['mp4', 'mov', 'avi', 'webm', 'mpeg', 'mpg'];
+                            const fileExtension = file.name.split('.').pop().toLowerCase();
+                            const isVideo = file.type.startsWith('video/') || videoExtensions.includes(fileExtension);
+
                             setFormData({
-                              ...formData, 
+                              ...formData,
                               file_url,
-                              media_type: file.type.startsWith('video/') ? 'video' : 'image'
+                              media_type: isVideo ? 'video' : 'image'
                             });
                             showAlert('success', 'קובץ הועלה בהצלחה');
                           } catch (error) {
