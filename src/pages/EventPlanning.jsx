@@ -79,6 +79,8 @@ export default function EventPlanning() {
   const [currentMedia, setCurrentMedia] = useState(null);
   const [galleryItems, setGalleryItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [displayCount, setDisplayCount] = useState(20);
+  const ITEMS_PER_PAGE = 20;
 
   // Scroll spy effect
   useEffect(() => {
@@ -144,7 +146,16 @@ export default function EventPlanning() {
   // Load gallery items from database or fallback to mock data
   useEffect(() => {
     loadGalleryItems();
+    setDisplayCount(ITEMS_PER_PAGE); // Reset display count when filter changes
   }, [loadGalleryItems]);
+
+  // Get currently displayed items
+  const displayedItems = galleryItems.slice(0, displayCount);
+  const hasMore = displayCount < galleryItems.length;
+
+  const loadMore = () => {
+    setDisplayCount(prev => prev + ITEMS_PER_PAGE);
+  };
 
   const scrollToSection = (sectionId) => {
     const element = document.getElementById(sectionId);
@@ -377,21 +388,21 @@ export default function EventPlanning() {
               Array(8).fill(0).map((_, index) => (
                 <div key={index} className="aspect-square bg-gray-200 rounded-lg animate-pulse"></div>
               ))
-            ) : galleryItems.length > 0 ? (
-              galleryItems.map(item => (
+            ) : displayedItems.length > 0 ? (
+              displayedItems.map(item => (
                 <div
                   key={item.id}
                   className="relative aspect-square cursor-pointer group overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300"
                   onClick={() => openLightbox(item)}
                 >
                   {item.type === 'video' ? (
-                    <video 
+                    <video
                       src={item.url}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       muted
                     />
                   ) : (
-                    <img 
+                    <img
                       src={item.url}
                       alt={item.title}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
@@ -417,6 +428,18 @@ export default function EventPlanning() {
               </div>
             )}
           </div>
+
+          {/* Load More Button */}
+          {!isLoading && hasMore && (
+            <div className="flex justify-center mt-8 animate-fade-in-up">
+              <Button
+                onClick={loadMore}
+                className="bg-gold hover:bg-gold/90 text-black font-semibold px-8 py-3 text-lg transform hover:scale-105 transition-all duration-300"
+              >
+                טען עוד ({galleryItems.length - displayCount} נותרו)
+              </Button>
+            </div>
+          )}
         </div>
       </section>
 
