@@ -329,7 +329,7 @@ export default function EventPlanning() {
                 וייתן לכם להיות האורחים של עצמכם – לחוות, להתרגש וליהנות מכל שנייה.
               </p>
 
-              <div className="bg-gradient-to-l from-gold/10 to-gold/5 p-8 rounded-xl border-l-4 border-gold text-right">
+              <div className="bg-gradient-to-r from-gold/10 via-gold/5 to-gold/10 p-8 rounded-xl border-r-4 border-l-4 border-gold text-center">
                 <p className="text-gold font-semibold text-2xl mb-4">
                   &quot;כי בסופו של דבר, מה שנשאר הם הזיכרונות&quot;
                 </p>
