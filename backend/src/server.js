@@ -180,14 +180,14 @@ async function createDefaultAdmin() {
   try {
     const User = require('./models/User');
     
-    const existingAdmin = await User.findOne({ 
-      where: { email: 'admin@trachtenberg.co.il' } 
+    const existingAdmin = await User.findOne({
+      where: { email: 'ET0559585990@gmail.com' }
     });
 
     if (!existingAdmin) {
       await User.create({
         name: 'מנהל מערכת',
-        email: 'admin@trachtenberg.co.il',
+        email: 'ET0559585990@gmail.com',
         password: 'Tr@ch2025!',
         role: 'admin',
         is_active: true
