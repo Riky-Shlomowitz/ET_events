@@ -549,8 +549,8 @@ export default function EventPlanning() {
                       <Phone className="w-5 h-5 text-gold mr-2" />
                       <span className="text-gray-300">טלפון</span>
                     </div>
-                    <a href="tel:0544483040" className="text-xl font-bold hover:text-gold transition-colors">
-                      054-448-3040
+                    <a href="tel:0559585990" className="text-xl font-bold hover:text-gold transition-colors">
+                      055-958-5990
                     </a>
                   </div>
                   
@@ -567,7 +567,7 @@ export default function EventPlanning() {
 
                 <div className="mt-6">
                   <a
-                    href="https://wa.me/+972544483040?text=שלום, אשמח לקבל פרטים על הפקת אירוע"
+                    href="https://wa.me/+972559585990?text=שלום, אשמח לקבל פרטים על הפקת אירוע"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center bg-green-600 hover:bg-green-500 text-white font-semibold px-6 py-3 rounded-lg transition-all duration-300 transform hover:scale-105"
