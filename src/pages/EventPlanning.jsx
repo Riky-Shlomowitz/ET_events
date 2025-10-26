@@ -559,8 +559,8 @@ export default function EventPlanning() {
                       <Mail className="w-5 h-5 text-gold mr-2" />
                       <span className="text-gray-300">מייל</span>
                     </div>
-                    <a href="mailto:riky.shlomowitz@gmail.com" className="text-lg hover:text-gold transition-colors">
-                      riky.shlomowitz@gmail.com
+                    <a href="mailto:et0559585990@gmail.com" className="text-lg hover:text-gold transition-colors">
+                      et0559585990@gmail.com
                     </a>
                   </div>
                 </div>
