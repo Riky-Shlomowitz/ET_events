@@ -449,7 +449,7 @@ export default function EventPlanning() {
           <div className="text-center mb-12 animate-fade-in-up">
             <h2 className="text-3xl md:text-4xl font-bold text-black mb-4">השירותים שלנו</h2>
             <div className="w-24 h-1 bg-gold mx-auto mb-6"></div>
-            <p className="text-lg text-gray-600">מגוון רחב של אירועים כשרים ומהודרים בכל הגדלים והסגנונות</p>
+            <p className="text-lg text-gray-600">מגוון רחב של אירועים בכל הגדלים והסגנונות</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
