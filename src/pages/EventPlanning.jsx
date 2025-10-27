@@ -417,9 +417,11 @@ export default function EventPlanning() {
                       )}
                     </div>
                   </div>
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 text-right">
-                    <p className="text-white text-sm font-medium">{item.title}</p>
-                  </div>
+                  {item.title && (
+                    <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-3 text-right">
+                      <p className="text-white text-sm font-medium">{item.title}</p>
+                    </div>
+                  )}
                 </div>
               ))
             ) : (
@@ -679,11 +681,13 @@ export default function EventPlanning() {
             </Button>
             
             {/* Image Title */}
-            <div className="absolute bottom-4 left-4 right-4 text-center">
-              <p className="text-white text-lg font-semibold bg-black/50 rounded-lg px-4 py-2">
-                {currentMedia.title}
-              </p>
-            </div>
+            {currentMedia.title && (
+              <div className="absolute bottom-4 left-4 right-4 text-center">
+                <p className="text-white text-lg font-semibold bg-black/50 rounded-lg px-4 py-2">
+                  {currentMedia.title}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -100,7 +100,7 @@ export default function AdminDashboard() {
         const isVideo = file.type.startsWith('video/') || videoExtensions.includes(fileExtension);
         const mediaType = isVideo ? 'video' : 'image';
         const newItem = {
-          title: file.name.split('.')[0],
+          title: '',
           description: '',
           category: 'general',
           media_type: mediaType,
@@ -637,7 +637,7 @@ export default function AdminDashboard() {
                 </div>
 
                 <div className="flex gap-3 pt-4">
-                  <Button onClick={handleSaveItem} disabled={!formData.title || !formData.file_url}>
+                  <Button onClick={handleSaveItem} disabled={!formData.file_url}>
                     <Save className="w-4 h-4 ml-2" />
                     שמור
                   </Button>
