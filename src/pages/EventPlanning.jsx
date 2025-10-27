@@ -595,7 +595,7 @@ export default function EventPlanning() {
                 className="h-12 w-auto mx-auto opacity-70"
               />
             </div>
-            <p className="text-lg">© 2025 עמנואל טרכטנברג – הפקת אירועים. כל הזכויות שמורות.</p>
+            <p className="text-lg">© {new Date().getFullYear()} עמנואל טרכטנברג – הפקת אירועים. כל הזכויות שמורות.</p>
             <div className="mt-4 text-gold font-medium">
               &quot;הופכים חלומות לזיכרונות בלתי נשכחים&quot;
             </div>
