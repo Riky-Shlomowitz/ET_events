@@ -489,7 +489,7 @@ export default function EventPlanning() {
             {/* Contact Form */}
             <div className="bg-gray-900/50 backdrop-blur-sm rounded-xl p-6 border border-gold/20 animate-fade-in-up">
               <h3 className="text-xl font-bold text-gold mb-4 text-right">שלחו לנו הודעה</h3>
-              <form action="https://formspree.io/f/mdklbagq" method="POST" className="space-y-4">
+              <form action="https://formspree.io/f/xyzbzrvq" method="POST" className="space-y-4">
                 <input type="text" name="_gotcha" className="hidden" />
                 
                 <div>
