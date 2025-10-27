@@ -79,8 +79,8 @@ export default function EventPlanning() {
   const [currentMedia, setCurrentMedia] = useState(null);
   const [galleryItems, setGalleryItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [displayCount, setDisplayCount] = useState(20);
-  const ITEMS_PER_PAGE = 20;
+  const [displayCount, setDisplayCount] = useState(16);
+  const ITEMS_PER_PAGE = 16;
 
   // Scroll spy effect
   useEffect(() => {
