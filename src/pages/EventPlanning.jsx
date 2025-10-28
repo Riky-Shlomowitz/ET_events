@@ -599,7 +599,21 @@ export default function EventPlanning() {
             <div className="mt-4 text-gold font-medium">
               &quot;הופכים חלומות לזיכרונות בלתי נשכחים&quot;
             </div>
-            <div className="mt-8">
+
+            {/* Developer Credit */}
+            <div className="mt-6 pt-6 border-t border-gray-700/50">
+              <p className="text-sm text-gray-500">
+                פותח ועוצב על ידי{' '}
+                <a
+                  href="mailto:riky.shlomowitz@gmail.com"
+                  className="text-gray-400 hover:text-gold transition-colors font-medium"
+                >
+                  ריקי שלומוביץ
+                </a>
+              </p>
+            </div>
+
+            <div className="mt-6">
               <Link to={createPageUrl('AdminLogin')} className="text-xs text-gray-600 hover:text-gold transition-colors tracking-widest uppercase">
                 Admin
               </Link>
