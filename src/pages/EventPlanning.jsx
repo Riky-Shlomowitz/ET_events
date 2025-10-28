@@ -605,8 +605,10 @@ export default function EventPlanning() {
               <p className="text-sm text-gray-500">
                 פותח ועוצב על ידי{' '}
                 <a
-                  href="mailto:riky.shlomowitz@gmail.com"
-                  className="text-gray-400 hover:text-gold transition-colors font-medium"
+                  href="https://mail.google.com/mail/?view=cm&fs=1&to=riky.shlomowitz@gmail.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gold hover:text-gold/80 transition-colors font-medium underline decoration-gold/50 hover:decoration-gold"
                 >
                   ריקי שלומוביץ
                 </a>
