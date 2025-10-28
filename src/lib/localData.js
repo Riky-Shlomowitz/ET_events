@@ -245,16 +245,8 @@ export const UploadFile = async ({ file }) => {
           files.push(fileData);
           localStorage.setItem('uploaded_files', JSON.stringify(files));
 
-          const demoUrls = [
-            '/images/gallery/general-1.jpg',
-            '/images/gallery/general-2.jpg',
-            '/images/gallery/besari-1.jpg',
-            '/images/gallery/halavi-1.jpg',
-            '/images/gallery/kelim-1.jpg'
-          ];
-
-          const randomUrl = demoUrls[Math.floor(Math.random() * demoUrls.length)];
-          resolve({ file_url: randomUrl });
+          // Use only the existing demo image
+          resolve({ file_url: '/images/gallery/general-1.jpg' });
         } catch (error) {
           reject(new Error('Failed to process file'));
         }
