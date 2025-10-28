@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { User } from '@/lib/localData';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Button } from '@/components/ui/forms/button';
+import { Input } from '@/components/ui/forms/input';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/layout/card';
+import { Alert, AlertDescription } from '@/components/ui/feedback/alert';
 import { Lock, User as UserIcon, Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { createPageUrl } from '@/utils';

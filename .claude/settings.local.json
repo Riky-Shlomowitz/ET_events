@@ -13,7 +13,8 @@
       "Bash(curl -s http://72.61.144.195/api/gallery)",
       "Bash(curl -s \"https://api.github.com/repos/Riky-Shlomowitz/ET_events/actions/runs?per_page=1\")",
       "Bash(curl -s -X POST http://72.61.144.195/api/auth/login )",
-      "Bash(curl -s -X POST http://72.61.144.195/api/auth/login -H \"Content-Type: application/json\" -d '{\"\"\"\"email\"\"\"\":\"\"\"\"admin@trachtenberg.co.il\"\"\"\",\"\"\"\"password\"\"\"\":\"\"\"\"Tr@ch2025!\"\"\"\"}')"
+      "Bash(curl -s -X POST http://72.61.144.195/api/auth/login -H \"Content-Type: application/json\" -d '{\"\"\"\"email\"\"\"\":\"\"\"\"admin@trachtenberg.co.il\"\"\"\",\"\"\"\"password\"\"\"\":\"\"\"\"Tr@ch2025!\"\"\"\"}')",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []

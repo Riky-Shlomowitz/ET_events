@@ -1,14 +1,14 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { GalleryItem, UploadFile } from '@/lib/localData';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Button } from '@/components/ui/forms/button';
+import { Input } from '@/components/ui/forms/input';
+import { Textarea } from '@/components/ui/forms/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/forms/select';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/layout/card';
+import { Badge } from '@/components/ui/layout/badge';
+import { Alert, AlertDescription } from '@/components/ui/feedback/alert';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/layout/tabs';
 import { 
   Upload, 
   Image as ImageIcon, 

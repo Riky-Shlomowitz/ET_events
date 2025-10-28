@@ -1,8 +1,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Menu, X, Phone, Mail, MessageCircle, Star, Users, Calendar, Camera, ChevronLeft, ChevronRight, Play, Heart, Award } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/forms/button';
 import { GalleryItem } from '@/lib/localData';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
