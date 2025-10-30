@@ -52,6 +52,15 @@ const GalleryItem = sequelize.define('GalleryItem', {
     type: DataTypes.INTEGER,
     defaultValue: 0
   },
+  priority: {
+    type: DataTypes.INTEGER,
+    defaultValue: 0,
+    validate: {
+      min: 0,
+      max: 5
+    },
+    comment: 'Priority/rating 0-5 stars for sorting'
+  },
   metadata: {
     type: DataTypes.JSONB, // PostgreSQL JSON field
     defaultValue: {}

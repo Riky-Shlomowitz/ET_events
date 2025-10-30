@@ -48,7 +48,7 @@ class GalleryController {
         where.status = status;
       }
 
-      // Sorting
+      // Sorting - priority first, then by the requested sort field
       const [sortField, sortDirection] = sort.startsWith('-')
         ? [sort.slice(1), 'DESC']
         : [sort, 'ASC'];
@@ -57,7 +57,10 @@ class GalleryController {
 
       const { rows: items, count: total } = await GalleryItem.findAndCountAll({
         where,
-        order: [[sortField, sortDirection]],
+        order: [
+          ['priority', 'DESC'], // Highest priority first
+          [sortField, sortDirection] // Then by requested field
+        ],
         limit: parseInt(limit),
         offset: parseInt(offset)
       });

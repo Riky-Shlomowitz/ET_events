@@ -45,6 +45,7 @@ export default function AdminDashboard() {
     is_featured: false,
     status: 'active',
     sort_order: 0,
+    priority: 0,
     file_url: ''
   });
 
@@ -113,7 +114,8 @@ export default function AdminDashboard() {
           file_url: file_url,
           is_featured: false,
           status: 'active',
-          sort_order: galleryItems.length // This might need adjustment if galleryItems changes between uploads
+          sort_order: galleryItems.length, // This might need adjustment if galleryItems changes between uploads
+          priority: 0
         };
 
         await apiClient.createGalleryItem(newItem);
@@ -154,6 +156,7 @@ export default function AdminDashboard() {
       is_featured: item.is_featured || false,
       status: item.status,
       sort_order: item.sort_order || 0,
+      priority: item.priority || 0,
       file_url: item.file_url
     });
   };
@@ -212,6 +215,18 @@ export default function AdminDashboard() {
     } catch (err) {
       showAlert('error', 'שגיאה בעדכון הסטטוס');
       console.error('Status update error:', err);
+    }
+  };
+
+  // Update priority (stars) for an item
+  const handlePriorityChange = async (item, newPriority) => {
+    try {
+      await apiClient.updateGalleryItem(item.id, { ...item, priority: newPriority });
+      showAlert('success', `עדיפות עודכנה ל-${newPriority} כוכבים`);
+      loadGalleryItems();
+    } catch (err) {
+      showAlert('error', 'שגיאה בעדכון העדיפות');
+      console.error('Priority update error:', err);
     }
   };
 
@@ -346,6 +361,32 @@ export default function AdminDashboard() {
                       {item.description && (
                         <p className="text-gray-600 text-sm">{item.description}</p>
                       )}
+                      
+                      {/* Priority Stars */}
+                      <div className="flex items-center gap-1">
+                        {[1, 2, 3, 4, 5].map((star) => (
+                          <button
+                            key={star}
+                            onClick={() => handlePriorityChange(item, star === (item.priority || 0) ? 0 : star)}
+                            className="focus:outline-none transition-all hover:scale-110"
+                            title={`${star} כוכבים`}
+                          >
+                            <Star
+                              className={`w-5 h-5 ${
+                                star <= (item.priority || 0)
+                                  ? 'fill-yellow-400 text-yellow-400'
+                                  : 'text-gray-300'
+                              }`}
+                            />
+                          </button>
+                        ))}
+                        {(item.priority || 0) > 0 && (
+                          <span className="text-xs text-gray-500 mr-2">
+                            ({item.priority})
+                          </span>
+                        )}
+                      </div>
+
                       <div className="flex items-center justify-between">
                         <Badge variant="outline">
                           {categories.find(cat => cat.value === item.category)?.label || item.category}
