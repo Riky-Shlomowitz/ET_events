@@ -9,10 +9,10 @@ const GalleryItem = sequelize.define('GalleryItem', {
   },
   title: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
+    defaultValue: '',
     validate: {
-      notEmpty: true,
-      len: [1, 255]
+      len: [0, 255]
     }
   },
   description: {
