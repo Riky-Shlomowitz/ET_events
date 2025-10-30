@@ -100,8 +100,13 @@ export default function AdminDashboard() {
         const fileExtension = file.name.split('.').pop().toLowerCase();
         const isVideo = file.type.startsWith('video/') || videoExtensions.includes(fileExtension);
         const mediaType = isVideo ? 'video' : 'image';
+        
+        // Generate title from filename (remove extension)
+        const fileName = file.name.replace(/\.[^/.]+$/, '');
+        const autoTitle = fileName || 'פריט גלריה חדש';
+        
         const newItem = {
-          title: '',
+          title: autoTitle,
           description: '',
           category: 'general',
           media_type: mediaType,
