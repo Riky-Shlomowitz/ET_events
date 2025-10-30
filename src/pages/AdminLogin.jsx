@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { User } from '@/lib/localData';
+import apiClient from '@/lib/apiClient';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/layout/card';
@@ -22,8 +22,8 @@ export default function AdminLogin() {
     setError('');
 
     try {
-      // Use the User.login function from local data system
-      await User.login(email, password);
+      // Login via API
+      await apiClient.login(email, password);
       // אימות מוצלח - נווט לדף הניהול
       navigate(createPageUrl('AdminDashboard'));
     } catch (err) {

@@ -70,6 +70,7 @@ app.get('/api', (req, res) => {
     message: 'Trachtenberg Events API',
     version: '1.0.0',
     endpoints: {
+      
       gallery: {
         'GET /api/gallery': 'Get all gallery items',
         'GET /api/gallery/:id': 'Get gallery item by ID',
@@ -181,14 +182,14 @@ async function createDefaultAdmin() {
     const User = require('./models/User');
     
     const existingAdmin = await User.findOne({
-      where: { email: 'ET0559585990@gmail.com' }
+      where: { email: process.env.ADMIN_EMAIL || 'ET0559585990@gmail.com' }
     });
 
     if (!existingAdmin) {
       await User.create({
         name: 'מנהל מערכת',
-        email: 'ET0559585990@gmail.com',
-        password: 'Tr@ch2025!',
+        email: process.env.ADMIN_EMAIL || 'ET0559585990@gmail.com',
+        password: process.env.ADMIN_PASSWORD,
         role: 'admin',
         is_active: true
       });

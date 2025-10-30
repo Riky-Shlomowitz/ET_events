@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useCallback } from 'react';
-import { GalleryItem, UploadFile } from '@/lib/localData';
+import apiClient from '@/lib/apiClient';
 import { Button } from '@/components/ui/forms/button';
 import { Input } from '@/components/ui/forms/input';
 import { Textarea } from '@/components/ui/forms/textarea';
@@ -63,7 +63,7 @@ export default function AdminDashboard() {
   // Memoize loadGalleryItems to avoid dependency issues
   const loadGalleryItems = useCallback(async () => {
     try {
-      const items = await GalleryItem.list('-created_date');
+      const items = await apiClient.getGalleryItems();
       setGalleryItems(items);
       } catch (err) {
         // showAlert is a stable function as setAlert is stable, so no need to list it as dependency
@@ -91,7 +91,8 @@ export default function AdminDashboard() {
           )
         );
 
-        const { file_url } = await UploadFile({ file });
+        const response = await apiClient.uploadFile(file);
+        const file_url = response.data?.file_url || response.file_url;
 
         // Create gallery item
         // Check both MIME type and file extension
@@ -110,7 +111,7 @@ export default function AdminDashboard() {
           sort_order: galleryItems.length // This might need adjustment if galleryItems changes between uploads
         };
 
-        await GalleryItem.create(newItem);
+        await apiClient.createGalleryItem(newItem);
 
         // Update progress
         setUploadingFiles(prev => 
@@ -155,14 +156,14 @@ export default function AdminDashboard() {
   const handleSaveItem = async () => {
     try {
       if (editingItem && editingItem.id) { // Check for editing an existing item
-        await GalleryItem.update(editingItem.id, formData);
+        await apiClient.updateGalleryItem(editingItem.id, formData);
         showAlert('success', 'הפריט עודכן בהצלחה');
       } else { // Creating a new item
         if (!formData.file_url) {
             showAlert('error', 'יש להעלות קובץ עבור פריט חדש.');
             return;
         }
-        await GalleryItem.create(formData);
+        await apiClient.createGalleryItem(formData);
         showAlert('success', 'פריט חדש נוצר בהצלחה');
       }
       
@@ -187,7 +188,7 @@ export default function AdminDashboard() {
   const handleDeleteItem = async (itemId) => {
     if (confirm('האם אתם בטוחים שברצונכם למחוק פריט זה?')) {
       try {
-        await GalleryItem.delete(itemId);
+        await apiClient.deleteGalleryItem(itemId);
         showAlert('success', 'הפריט נמחק בהצלחה');
         loadGalleryItems();
       } catch (err) {
@@ -200,7 +201,7 @@ export default function AdminDashboard() {
   const toggleItemStatus = async (item) => {
     try {
       const newStatus = item.status === 'active' ? 'inactive' : 'active';
-      await GalleryItem.update(item.id, { ...item, status: newStatus });
+      await apiClient.updateGalleryItem(item.id, { ...item, status: newStatus });
       showAlert('success', `הפריט ${newStatus === 'active' ? 'הופעל' : 'הוסתר'}`);
       loadGalleryItems();
     } catch (err) {
@@ -582,7 +583,8 @@ export default function AdminDashboard() {
                           try {
                             // Indicate upload is happening
                             showAlert('info', 'מעלה קובץ...');
-                            const { file_url } = await UploadFile({ file });
+                            const response = await apiClient.uploadFile(file);
+                            const file_url = response.data?.file_url || response.file_url;
 
                             // Check both MIME type and file extension
                             const videoExtensions = ['mp4', 'mov', 'avi', 'webm', 'mpeg', 'mpg'];

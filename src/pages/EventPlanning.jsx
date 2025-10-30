@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { Menu, X, Phone, Mail, MessageCircle, Star, Users, Calendar, Camera, ChevronLeft, ChevronRight, Play, Heart, Award } from 'lucide-react';
 import { Button } from '@/components/ui/forms/button';
-import { GalleryItem } from '@/lib/localData';
+import apiClient from '@/lib/apiClient';
 import { Link } from 'react-router-dom';
 import { createPageUrl } from '@/utils';
 
@@ -60,15 +60,7 @@ const services = [
   }
 ];
 
-// Mock data as fallback
-const mockGalleryItems = [
-  { id: 1, type: 'image', url: 'https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', category: 'besari', title: 'אירוע בשרי מפואר' },
-  { id: 2, type: 'image', url: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', category: 'halavi', title: 'חגיגה חלבית אלגנטית' },
-  { id: 3, type: 'image', url: 'https://images.unsplash.com/photo-1578662996442-48f60103fc96?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', category: 'kelim', title: 'עיצוב שולחן מרשים' },
-  { id: 4, type: 'image', url: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', category: 'besari', title: 'ערב גאלה יוקרתי' },
-  { id: 5, type: 'image', url: 'https://images.unsplash.com/photo-1505236858219-8359eb29e329?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', category: 'halavi', title: 'חתונה רומנטית' },
-  { id: 6, type: 'image', url: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', category: 'kelim', title: 'כלים וחמרים איכותיים' }
-];
+// Gallery items loaded from server only
 
 export default function EventPlanning() {
   const [activeSection, setActiveSection] = useState('home');
@@ -104,40 +96,29 @@ export default function EventPlanning() {
   const loadGalleryItems = useCallback(async () => {
     setIsLoading(true);
     try {
-      // Try to load from database first
-      const dbItems = await GalleryItem.list('-sort_order');
+      // Load from database
+      const dbItems = await apiClient.getGalleryItems();
       const activeItems = dbItems.filter(item => item.status === 'active');
       
-      if (activeItems.length > 0) {
-        // Use database items
-        const filteredItems = galleryFilter === 'all' 
-          ? activeItems 
-          : activeItems.filter(item => item.category === galleryFilter);
-        
-        // Convert to expected format
-        const formattedItems = filteredItems.map(item => ({
-          id: item.id,
-          type: item.media_type,
-          url: item.file_url,
-          category: item.category,
-          title: item.title,
-          description: item.description
-        }));
-        
-        setGalleryItems(formattedItems);
-      } else {
-        // Fallback to mock data
-        const filteredItems = galleryFilter === 'all' 
-          ? mockGalleryItems 
-          : mockGalleryItems.filter(item => item.category === galleryFilter);
-        setGalleryItems(filteredItems);
-      }
+      // Filter by category
+      const filteredItems = galleryFilter === 'all' 
+        ? activeItems 
+        : activeItems.filter(item => item.category === galleryFilter);
+      
+      // Convert to expected format
+      const formattedItems = filteredItems.map(item => ({
+        id: item.id,
+        type: item.media_type,
+        url: item.file_url,
+        category: item.category,
+        title: item.title,
+        description: item.description
+      }));
+      
+      setGalleryItems(formattedItems);
     } catch (err) {
-      // On error, use mock data
-      const filteredItems = galleryFilter === 'all'
-        ? mockGalleryItems
-        : mockGalleryItems.filter(item => item.category === galleryFilter);
-      setGalleryItems(filteredItems);
+      console.error('Error loading gallery:', err);
+      setGalleryItems([]);
     }
     setIsLoading(false);
   }, [galleryFilter]);
