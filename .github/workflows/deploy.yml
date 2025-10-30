@@ -1,0 +1,106 @@
+name: 🚀 Deploy to Hostinger
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Deploy Application
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v3
+
+    - name: 🚀 Deploy to Hostinger VPS
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.HOSTINGER_HOST }}
+        username: ${{ secrets.HOSTINGER_USER }}
+        password: ${{ secrets.HOSTINGER_PASSWORD }}
+        port: 22
+        timeout: 60s
+        script: |
+          echo "🚀 Starting deployment..."
+          
+          # Navigate to app directory
+          cd /var/www/trachtenberg-events || {
+            echo "Creating app directory..."
+            mkdir -p /var/www/trachtenberg-events
+            cd /var/www/trachtenberg-events
+          }
+          
+          # Clone or pull latest code
+          if [ -d ".git" ]; then
+            echo "🔄 Pulling latest changes..."
+            git fetch origin
+            git reset --hard origin/main
+            git pull origin main
+          else
+            echo "📥 Cloning repository..."
+            git clone https://github.com/${{ github.repository }}.git .
+          fi
+          
+          # Backend Setup
+          echo "🖥️ Setting up backend..."
+          cd backend
+          
+          # Install dependencies
+          npm install --production
+          
+          # Create .env file if it doesn't exist
+          if [ ! -f ".env" ]; then
+            echo "Creating .env file..."
+            cat > .env << 'EOF'
+          DB_HOST=localhost
+          DB_PORT=5432
+          DB_NAME=trachtenberg_events
+          DB_USER=events_admin
+          DB_PASS=Tr@ch2025!
+          PORT=3000
+          NODE_ENV=production
+          FRONTEND_URL=http://${{ secrets.HOSTINGER_HOST }}
+          JWT_SECRET=Tr@ch2025_Super_Secret_Key_2025
+          JWT_EXPIRE=7d
+          ADMIN_EMAIL=ET0559585990@gmail.com
+          ADMIN_PASSWORD=Tr@ch2025!
+          EOF
+          fi
+          
+          # Create uploads directory
+          mkdir -p ../uploads
+          chmod 755 ../uploads
+          
+          # Restart backend with PM2
+          echo "🔄 Restarting backend..."
+          pm2 stop trachtenberg-backend 2>/dev/null || true
+          pm2 delete trachtenberg-backend 2>/dev/null || true
+          pm2 start src/server.js --name "trachtenberg-backend"
+          pm2 save
+          
+          # Frontend Setup
+          echo "🌐 Building frontend..."
+          cd ..
+          npm install
+          npm run build
+          
+          # Copy to web directory
+          echo "📁 Deploying frontend..."
+          sudo rm -rf /var/www/html/*
+          sudo cp -r dist/* /var/www/html/
+          sudo chown -R www-data:www-data /var/www/html/ 2>/dev/null || sudo chown -R nginx:nginx /var/www/html/
+          
+          # Test backend
+          echo "🏥 Testing backend..."
+          sleep 3
+          curl -f http://localhost:3000/api/health || echo "⚠️ Backend health check failed"
+          
+          # Reload nginx
+          echo "🔄 Reloading nginx..."
+          sudo systemctl reload nginx 2>/dev/null || sudo service nginx reload
+          
+          echo "✅ Deployment completed!"
+          pm2 list
+

@@ -80,7 +80,7 @@ jobs:
             git reset --hard origin/main
           else
             echo "📥 Cloning repository..."
-            git clone git@github.com:${{ github.repository }}.git .
+            git clone https://github.com/${{ github.repository }}.git .
           fi
           
           # Frontend Setup
@@ -121,6 +121,11 @@ jobs:
           
           # JWT Configuration
           JWT_SECRET=${{ secrets.JWT_SECRET || 'Tr@ch2025_Super_Secret_Key_2025' }}
+          JWT_EXPIRE=7d
+          
+          # Admin User
+          ADMIN_EMAIL=ET0559585990@gmail.com
+          ADMIN_PASSWORD=Tr@ch2025!
           
           # File Upload Configuration
           UPLOAD_DIR=/var/www/trachtenberg-events/uploads
