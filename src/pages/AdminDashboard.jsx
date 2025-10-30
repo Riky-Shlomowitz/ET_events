@@ -42,7 +42,6 @@ export default function AdminDashboard() {
     description: '',
     category: 'general',
     media_type: 'image',
-    is_featured: false,
     status: 'active',
     sort_order: 0,
     priority: 0,
@@ -112,7 +111,6 @@ export default function AdminDashboard() {
           category: 'general',
           media_type: mediaType,
           file_url: file_url,
-          is_featured: false,
           status: 'active',
           sort_order: galleryItems.length, // This might need adjustment if galleryItems changes between uploads
           priority: 0
@@ -153,7 +151,6 @@ export default function AdminDashboard() {
       description: item.description || '',
       category: item.category,
       media_type: item.media_type,
-      is_featured: item.is_featured || false,
       status: item.status,
       sort_order: item.sort_order || 0,
       priority: item.priority || 0,
@@ -181,9 +178,9 @@ export default function AdminDashboard() {
         description: '',
         category: 'general',
         media_type: 'image',
-        is_featured: false,
         status: 'active',
         sort_order: 0,
+        priority: 0,
         file_url: ''
       });
       loadGalleryItems();
@@ -325,12 +322,7 @@ export default function AdminDashboard() {
                     )}
                     
                     {/* Status overlay */}
-                    <div className="absolute top-2 right-2 flex gap-2">
-                      {item.is_featured && (
-                        <Badge className="bg-yellow-500">
-                          <Star className="w-3 h-3" />
-                        </Badge>
-                      )}
+                    <div className="absolute top-2 right-2">
                       <Badge 
                         variant={item.status === 'active' ? 'default' : 'secondary'}
                         className={item.status === 'active' ? 'bg-green-500' : 'bg-gray-500'}
@@ -660,16 +652,6 @@ export default function AdminDashboard() {
                 )}
 
                 <div className="flex items-center gap-4">
-                  <label className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={formData.is_featured}
-                      onChange={(e) => setFormData({...formData, is_featured: e.target.checked})}
-                      className="h-4 w-4 text-gold focus:ring-gold border-gray-300 rounded"
-                    />
-                    פריט מומלץ
-                  </label>
-
                   <Select
                     value={formData.status}
                     onValueChange={(value) => setFormData({...formData, status: value})}
