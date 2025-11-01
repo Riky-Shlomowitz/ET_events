@@ -377,10 +377,15 @@ export default function EventPlanning() {
                 >
                   {item.type === 'video' ? (
                     <video
-                      src={item.url}
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       muted
-                    />
+                      playsInline
+                      preload="metadata"
+                    >
+                      <source src={item.url} type="video/mp4" />
+                      <source src={item.url} type="video/webm" />
+                      <source src={item.url} type="video/quicktime" />
+                    </video>
                   ) : (
                     <img
                       src={item.url}

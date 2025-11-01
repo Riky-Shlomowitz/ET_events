@@ -306,13 +306,18 @@ export default function AdminDashboard() {
                   <div className="relative aspect-video">
                     {item.media_type === 'video' ? (
                       <video 
-                        src={item.file_url} 
                         className="w-full h-full object-cover"
                         controls={false}
-                        muted // Mute videos for autoplay in grid
+                        muted
                         loop
                         playsInline
-                      />
+                        preload="metadata"
+                      >
+                        <source src={item.file_url} type="video/mp4" />
+                        <source src={item.file_url} type="video/webm" />
+                        <source src={item.file_url} type="video/quicktime" />
+                        הדפדפן לא תומך בסרטון
+                      </video>
                     ) : (
                       <img 
                         src={item.file_url} 
