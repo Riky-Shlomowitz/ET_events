@@ -375,7 +375,8 @@ export default function EventPlanning() {
                   className="relative aspect-square cursor-pointer group overflow-hidden rounded-lg shadow-md hover:shadow-xl transition-all duration-300"
                   onClick={() => openLightbox(item)}
                 >
-                  {item.type === 'video' ? (
+                {item.type === 'video' ? (
+                  <>
                     <video
                       className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       muted
@@ -386,13 +387,24 @@ export default function EventPlanning() {
                       <source src={item.url} type="video/webm" />
                       <source src={item.url} type="video/quicktime" />
                     </video>
-                  ) : (
-                    <img
-                      src={item.url}
-                      alt={item.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                  )}
+                    {/* אייקון וידאו תמיד נראה */}
+                    <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm rounded-full p-3 pointer-events-none">
+                      <svg 
+                        className="w-8 h-8 text-white" 
+                        fill="currentColor" 
+                        viewBox="0 0 20 20"
+                      >
+                        <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" />
+                      </svg>
+                    </div>
+                  </>
+                ) : (
+                  <img
+                    src={item.url}
+                    alt={item.title}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                  />
+                )}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all duration-300 flex items-center justify-center">
                     <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                       {item.type === 'video' ? (
