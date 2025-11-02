@@ -1,200 +1,201 @@
-# 🎉 עמנואל טרכטנברג - הפקת אירועים
+# Trachtenberg Events
 
-## 📖 תיאור
+A professional full-stack event planning platform for managing events, galleries, and client interactions.
 
-אתר Full Stack מקצועי לניהול הפקת אירועים, כולל:
-- 🌐 **Frontend**: אתר רספונסיבי עם גלריה מרשימה
-- 🔐 **ממשק ניהול**: לוח בקרה מלא למנהל
-- 🖥️ **Backend**: API עם Node.js + Express + PostgreSQL
-- 📸 **ניהול תמונות**: העלאה, עריכה, מחיקה
-- 🔒 **אבטחה**: JWT authentication
+## 🌟 Features
 
----
+- **Event Gallery Management** - Upload and manage photos and videos with priority-based sorting
+- **Admin Dashboard** - Full control panel for content management
+- **Responsive Design** - Beautiful, mobile-first interface
+- **Secure Authentication** - JWT-based admin authentication
+- **File Upload System** - Support for images and videos (up to 200MB)
+- **Priority System** - 5-star rating system for gallery items
+- **HTTPS Support** - Secure SSL/TLS encryption with Let's Encrypt
 
-## 🚀 פריסה מהירה
+## 🛠️ Tech Stack
 
-### **אפשרות 1: Hostinger VPS (מומלץ - $3.99/חודש)**
-- ✅ **זול ביותר** - $3.99/חודש
-- ✅ **שליטה מלאה** - שרת שלך
-- ✅ **פריסה אוטומטית** - דרך GitHub Actions
-- ✅ **200 תמונות** בקלות
+### Frontend
+- **React** - UI library
+- **Vite** - Build tool and dev server
+- **TailwindCSS** - Utility-first CSS framework
+- **Shadcn/ui** - Component library
 
-📖 **מדריך מלא**: [HOSTINGER_DEPLOYMENT_GUIDE.md](HOSTINGER_DEPLOYMENT_GUIDE.md)
+### Backend
+- **Node.js** - Runtime environment
+- **Express** - Web framework
+- **PostgreSQL** - Database
+- **Sequelize** - ORM
+- **JWT** - Authentication
+- **Multer** - File upload handling
 
-### **אפשרות 2: Railway ($20/חודש)**
-- ✅ **ניהול אוטומטי** - אפס תחזוקה
-- ✅ **פריסה בקליק** - חיבור ל-GitHub
-- ⚠️ **יקר יותר** - $20/חודש
+### Infrastructure
+- **Nginx** - Web server and reverse proxy
+- **PM2** - Process manager
+- **GitHub Actions** - CI/CD pipeline
+- **Hostinger VPS** - Hosting platform
 
-📖 **מדריך מלא**: [RAILWAY_DEPLOYMENT_GUIDE.md](RAILWAY_DEPLOYMENT_GUIDE.md)
+## 🚀 Quick Start
 
----
-
-## 💻 הפעלה מקומית (פיתוח)
-
-### **דרישות:**
+### Prerequisites
 - Node.js 18+
-- npm או yarn
+- PostgreSQL 14+
+- npm or yarn
 
-### **התקנה:**
+### Installation
+
+1. **Clone the repository**
 ```bash
-# Clone הפרויקט
 git clone https://github.com/Riky-Shlomowitz/ET_events.git
 cd ET_events
-
-# התקנת Frontend
-npm install
-
-# התקנת Backend
-cd backend
-npm install
 ```
 
-### **הפעלה:**
-```bash
-# Frontend (בטרמינל ראשון)
-npm run dev
-# יפתח ב-http://localhost:5173
-
-# Backend (בטרמינל שני)
-cd backend
-npm run dev
-# יפתח ב-http://localhost:3000
-```
-
----
-
-## 📁 מבנה הפרויקט
-
-```
-ET_events/
-├── src/                      # Frontend (React + Vite)
-│   ├── pages/                # דפים
-│   │   ├── EventPlanning.jsx # דף ראשי
-│   │   ├── AdminLogin.jsx    # התחברות מנהל
-│   │   └── AdminDashboard.jsx # ממשק ניהול
-│   ├── components/           # קומפוננטות UI
-│   └── lib/                  # ספריות עזר
-│
-├── backend/                  # Backend (Node.js + Express)
-│   ├── src/
-│   │   ├── models/           # מודלים (User, GalleryItem)
-│   │   ├── controllers/      # לוגיקת עסקים
-│   │   ├── routes/           # API routes
-│   │   ├── middleware/       # Authentication
-│   │   └── server.js         # נקודת כניסה
-│   └── package.json
-│
-├── public/images/            # תמונות סטטיות
-├── docs/                     # תיעוד מפורט
-│   ├── deployment/           # מדריכי פריסה
-│   ├── database/             # מדריכי DB
-│   └── development/          # מדריכי פיתוח
-│
-├── .github/workflows/        # GitHub Actions
-└── README.md                 # קובץ זה
-```
-
----
-
-## 🔐 ממשק ניהול
-
-### **פרטי התחברות:**
-- **URL**: `/AdminLogin`
-- **אימייל**: `admin@trachtenberg.co.il`
-- **סיסמה**: `Tr@ch2025!`
-
-### **תכונות:**
-- ✅ העלאת תמונות וסרטונים
-- ✅ עריכת פריטים בגלריה
-- ✅ מחיקת פריטים
-- ✅ ניהול קטגוריות
-- ✅ סטטיסטיקות
-
----
-
-## 🛠️ טכנולוגיות
-
-### **Frontend:**
-- ⚛️ React 18
-- ⚡ Vite
-- 🎨 Tailwind CSS
-- 🧩 Shadcn/ui
-- 🔄 React Router DOM
-- 📝 React Hook Form
-
-### **Backend:**
-- 🟢 Node.js 18
-- 🚂 Express 5
-- 🐘 PostgreSQL
-- 🔐 JWT Authentication
-- 📦 Sequelize ORM
-- 📤 Multer (העלאת קבצים)
-
----
-
-## 📚 תיעוד
-
-### **מדריכי פריסה:**
-- [Hostinger VPS Deployment](HOSTINGER_DEPLOYMENT_GUIDE.md)
-- [Railway Deployment](RAILWAY_DEPLOYMENT_GUIDE.md)
-- [GitHub Actions Setup](docs/deployment/GITHUB_SECRETS_SETUP.md)
-
-### **מדריכי Backend:**
-- [Backend Architecture](docs/database/BACKEND_ARCHITECTURE.md)
-- [Database Setup](docs/database/DATABASE_REAL_SETUP.md)
-
-### **מדריכי פיתוח:**
-- [Fullstack Summary](docs/development/FULLSTACK_SUMMARY.md)
-- [Manual GitHub Upload](docs/development/MANUAL_GITHUB_UPLOAD.md)
-
----
-
-## 🔧 Scripts
-
+2. **Install dependencies**
 ```bash
 # Frontend
-npm run dev          # הרצת dev server
-npm run build        # בנייה לproduction
-npm run preview      # תצוגה מקדימה של build
+npm install
 
 # Backend
 cd backend
-npm run dev          # הרצת dev server (עם nodemon)
-npm start            # הרצת production server
+npm install
 ```
 
+3. **Configure environment variables**
+
+Create `.env` file in `backend/` directory:
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_NAME=trachtenberg_events
+DB_USER=your_db_user
+DB_PASS=your_db_password
+
+PORT=3000
+NODE_ENV=development
+
+FRONTEND_URL=http://localhost:5173
+JWT_SECRET=your_secret_key
+JWT_EXPIRE=7d
+
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=your_admin_password
+
+UPLOAD_DIR=./uploads
+MAX_FILE_SIZE=209715200
+```
+
+4. **Set up database**
+```bash
+# Create PostgreSQL database
+createdb trachtenberg_events
+
+# Tables will be created automatically by Sequelize
+```
+
+5. **Run the application**
+
+Development mode:
+```bash
+# Terminal 1 - Frontend
+npm run dev
+
+# Terminal 2 - Backend
+cd backend
+npm run dev
+```
+
+Production mode:
+```bash
+# Build frontend
+npm run build
+
+# Start backend
+cd backend
+npm start
+```
+
+## 📁 Project Structure
+
+```
+trachtenberg-events/
+├── backend/
+│   ├── src/
+│   │   ├── config/        # Database and app configuration
+│   │   ├── controllers/   # Request handlers
+│   │   ├── middleware/    # Authentication, file upload
+│   │   ├── models/        # Sequelize models
+│   │   ├── routes/        # API routes
+│   │   └── server.js      # Entry point
+│   └── uploads/           # Uploaded files
+├── src/
+│   ├── components/        # React components
+│   ├── lib/              # Utilities and API client
+│   ├── pages/            # Page components
+│   └── main.jsx          # App entry point
+├── public/               # Static assets
+└── .github/
+    └── workflows/        # CI/CD pipelines
+```
+
+## 🔐 Admin Access
+
+Access the admin dashboard at `/adminlogin`
+
+Default credentials are set via environment variables:
+- Email: Configured in `ADMIN_EMAIL`
+- Password: Configured in `ADMIN_PASSWORD`
+
+## 📸 Gallery Management
+
+The admin dashboard allows you to:
+- Upload images and videos (up to 200MB)
+- Set priority (0-5 stars) for each item
+- Organize by categories
+- Manage visibility (active/inactive)
+- Delete items (removes both database record and physical file)
+
+## 🌐 Deployment
+
+The project includes automated deployment via GitHub Actions:
+
+1. Push to `main` branch triggers automatic deployment
+2. Frontend is built and deployed to `/var/www/html`
+3. Backend is restarted with PM2
+4. Nginx serves the application
+
+Manual deployment:
+```bash
+npm run build
+pm2 restart trachtenberg-backend
+```
+
+## 📝 API Endpoints
+
+### Authentication
+- `POST /api/auth/login` - Admin login
+- `GET /api/auth/profile` - Get user profile
+- `POST /api/auth/logout` - Logout
+
+### Gallery
+- `GET /api/gallery` - Get all gallery items
+- `POST /api/gallery` - Create gallery item
+- `PUT /api/gallery/:id` - Update gallery item
+- `DELETE /api/gallery/:id` - Delete gallery item
+- `POST /api/gallery/upload` - Upload file
+
+## 🤝 Contributing
+
+This is a private project. For any questions or suggestions, please contact the repository owner.
+
+## 📄 License
+
+All rights reserved.
+
+## 🔗 Links
+
+- **Live Site**: https://trachtenberg.sbs
+- **Repository**: https://github.com/Riky-Shlomowitz/ET_events
+
 ---
 
-## 🌟 תכונות
+Built with ❤️ for Trachtenberg Events
 
-### **למבקרים:**
-- 🏠 דף בית מרשים
-- 📸 גלריית תמונות וסרטונים
-- 🎯 פירוט שירותים
-- 📞 טופס יצירת קשר (Formspree)
-
-### **למנהל:**
-- 🔐 התחברות מאובטחת
-- 📤 העלאת תמונות/סרטונים
-- ✏️ עריכת פריטים
-- 🗑️ מחיקת פריטים
-- 📊 סטטיסטיקות
-
----
-
-## 📞 יצירת קשר
-
-- **אתר**: [לקישור לאתר]
-- **אימייל**: admin@trachtenberg.co.il
-- **GitHub**: [Riky-Shlomowitz/ET_events](https://github.com/Riky-Shlomowitz/ET_events)
-
----
-
-## 📄 רישיון
-
-This project is private and proprietary.
-
----
-
-**בנוי עם ❤️ לעמנואל טרכטנברג הפקת אירועים**

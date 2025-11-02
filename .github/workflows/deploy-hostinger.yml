@@ -86,13 +86,6 @@ jobs:
           # Frontend Setup
           echo "🌐 Setting up frontend..."
           
-          # Create production .env for frontend
-          cat > .env.production << EOF
-          VITE_API_URL=http://${{ secrets.HOSTINGER_HOST }}/api
-          VITE_APP_NAME=Trachtenberg Events
-          VITE_APP_VERSION=1.0.0
-          EOF
-          
           # Clean install with all dependencies
           rm -rf node_modules package-lock.json
           npm install
