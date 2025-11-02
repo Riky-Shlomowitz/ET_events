@@ -26,8 +26,8 @@ app.use(cors({
 app.use(morgan(process.env.NODE_ENV === 'development' ? 'dev' : 'combined'));
 
 // Body parsing middleware - increased for video uploads
-app.use(express.json({ limit: '100mb' }));
-app.use(express.urlencoded({ extended: true, limit: '100mb' }));
+app.use(express.json({ limit: '200mb' }));
+app.use(express.urlencoded({ extended: true, limit: '200mb' }));
 
 // Serve static files (uploads) with proper MIME types
 app.use('/uploads', (req, res, next) => {
@@ -182,13 +182,13 @@ async function createDefaultAdmin() {
     const User = require('./models/User');
     
     const existingAdmin = await User.findOne({
-      where: { email: process.env.ADMIN_EMAIL || 'ET0559585990@gmail.com' }
+      where: { email: process.env.ADMIN_EMAIL || 'et0559585990@gmail.com' }
     });
 
     if (!existingAdmin) {
       await User.create({
         name: 'מנהל מערכת',
-        email: process.env.ADMIN_EMAIL || 'ET0559585990@gmail.com',
+        email: process.env.ADMIN_EMAIL || 'et0559585990@gmail.com',
         password: process.env.ADMIN_PASSWORD,
         role: 'admin',
         is_active: true
