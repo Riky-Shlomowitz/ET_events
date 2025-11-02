@@ -72,6 +72,10 @@ export default function EventPlanning() {
   const [isLoading, setIsLoading] = useState(false);
   const [displayCount, setDisplayCount] = useState(16);
   const ITEMS_PER_PAGE = 16;
+  
+  // Swipe gesture tracking
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
 
   // Scroll spy effect
   useEffect(() => {
@@ -182,6 +186,33 @@ export default function EventPlanning() {
     window.addEventListener('keydown', handleKeyPress);
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [lightboxOpen, nextMedia, prevMedia]);
+
+  // Handle swipe gestures
+  const minSwipeDistance = 50; // Minimum distance for swipe (pixels)
+
+  const onTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    // RTL: swipe left = next, swipe right = previous
+    if (isLeftSwipe) {
+      nextMedia();
+    } else if (isRightSwipe) {
+      prevMedia();
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white text-gray-900" dir="rtl">
@@ -636,7 +667,12 @@ export default function EventPlanning() {
           className="fixed inset-0 bg-black/95 z-50 flex items-center justify-center p-4"
           onClick={closeLightbox}
         >
-          <div className="relative max-w-4xl max-h-full">
+          <div 
+            className="relative max-w-4xl max-h-full"
+            onTouchStart={onTouchStart}
+            onTouchMove={onTouchMove}
+            onTouchEnd={onTouchEnd}
+          >
             {currentMedia.type === 'video' ? (
               <video
                 controls
