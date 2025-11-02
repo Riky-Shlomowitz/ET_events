@@ -15,6 +15,20 @@ router.get('/:id', galleryController.getById);
 router.post('/', auth, adminAuth, galleryController.create);
 router.put('/:id', auth, adminAuth, galleryController.update);
 router.delete('/:id', auth, adminAuth, galleryController.delete);
-router.post('/upload', auth, adminAuth, upload.single('file'), galleryController.uploadFile);
+
+// Upload route with multer error handling
+router.post('/upload', auth, adminAuth, (req, res, next) => {
+  upload.single('file')(req, res, (err) => {
+    if (err) {
+      console.error('Multer upload error:', err);
+      return res.status(400).json({
+        success: false,
+        message: err.message || 'שגיאה בהעלאת הקובץ',
+        error: process.env.NODE_ENV === 'development' ? err.message : undefined
+      });
+    }
+    next();
+  });
+}, galleryController.uploadFile);
 
 module.exports = router;

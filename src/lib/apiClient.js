@@ -1,6 +1,6 @@
-// Use relative path in production, or env variable if set
-const API_BASE_URL = import.meta.env.VITE_API_URL || 
-  (import.meta.env.PROD ? '/api' : 'http://localhost:3000/api');
+// Always use relative path (works through nginx proxy)
+// Can override with VITE_API_URL env variable if needed
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 class ApiClient {
   async request(endpoint, options = {}) {

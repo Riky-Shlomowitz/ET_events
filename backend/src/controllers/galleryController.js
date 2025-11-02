@@ -196,13 +196,22 @@ class GalleryController {
   async uploadFile(req, res) {
     try {
       if (!req.file) {
+        console.error('Upload error: No file received');
         return res.status(400).json({
           success: false,
           message: 'לא נבחר קובץ להעלאה'
         });
       }
 
-      // Generate file URL
+      console.log('File uploaded successfully:', {
+        filename: req.file.filename,
+        originalname: req.file.originalname,
+        mimetype: req.file.mimetype,
+        size: req.file.size,
+        path: req.file.path
+      });
+
+      // Generate file URL - use absolute path for videos/images
       const fileUrl = `/uploads/${req.file.filename}`;
       
       res.json({
@@ -218,9 +227,10 @@ class GalleryController {
       });
     } catch (error) {
       console.error('Error in uploadFile:', error);
+      console.error('Error stack:', error.stack);
       res.status(500).json({
         success: false,
-        message: 'שגיאה בהעלאת הקובץ',
+        message: 'שגיאה בהעלאת הקובץ: ' + (error.message || 'Unknown error'),
         error: process.env.NODE_ENV === 'development' ? error.message : undefined
       });
     }
