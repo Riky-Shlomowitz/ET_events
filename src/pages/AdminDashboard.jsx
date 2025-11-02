@@ -319,18 +319,15 @@ export default function AdminDashboard() {
                           <source src={item.file_url} type="video/quicktime" />
                           הדפדפן לא תומך בסרטון
                         </video>
-                        {/* אייקון וידאו תמיד נראה */}
-                        <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-sm rounded-lg px-2.5 py-1.5 pointer-events-none shadow-lg flex items-center gap-1.5">
+                        {/* אייקון וידאו תמיד נראה - משולש Play */}
+                        <div className="absolute top-3 right-3 bg-black/70 backdrop-blur-sm rounded-full p-2.5 pointer-events-none shadow-lg">
                           <svg 
-                            className="w-5 h-5 text-white" 
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="2"
+                            className="w-6 h-6 text-white" 
+                            fill="currentColor"
                             viewBox="0 0 24 24"
                           >
-                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                            <path d="M8 5v14l11-7z" />
                           </svg>
-                          <span className="text-white text-xs font-medium">סרטון</span>
                         </div>
                       </>
                     ) : (

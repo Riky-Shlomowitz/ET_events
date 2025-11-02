@@ -167,20 +167,45 @@ class GalleryController {
   // DELETE /api/gallery/:id
   async delete(req, res) {
     try {
-      const deletedRows = await GalleryItem.destroy({
+      // First, find the item to get the file URL
+      const item = await GalleryItem.findOne({
         where: { id: req.params.id }
       });
 
-      if (deletedRows === 0) {
+      if (!item) {
         return res.status(404).json({
           success: false,
           message: 'פריט לא נמצא'
         });
       }
 
+      // Delete the physical file if it exists
+      if (item.file_url) {
+        const fs = require('fs').promises;
+        const path = require('path');
+        
+        // Extract filename from URL (e.g., /uploads/filename.jpg -> filename.jpg)
+        const filename = item.file_url.split('/').pop();
+        const uploadDir = process.env.UPLOAD_DIR || path.join(__dirname, '../../..', 'uploads');
+        const filePath = path.join(uploadDir, filename);
+        
+        try {
+          await fs.unlink(filePath);
+          console.log(`Deleted file: ${filePath}`);
+        } catch (fileError) {
+          console.error(`Failed to delete file: ${filePath}`, fileError);
+          // Continue even if file deletion fails (file might already be deleted)
+        }
+      }
+
+      // Delete from database
+      await GalleryItem.destroy({
+        where: { id: req.params.id }
+      });
+
       res.json({
         success: true,
-        message: 'פריט נמחק בהצלחה'
+        message: 'פריט והקובץ נמחקו בהצלחה'
       });
     } catch (error) {
       console.error('Error in delete:', error);
