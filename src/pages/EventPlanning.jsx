@@ -388,14 +388,17 @@ export default function EventPlanning() {
                       <source src={item.url} type="video/quicktime" />
                     </video>
                     {/* אייקון וידאו תמיד נראה */}
-                    <div className="absolute top-4 right-4 bg-black/60 backdrop-blur-sm rounded-full p-3 pointer-events-none">
+                    <div className="absolute top-4 right-4 bg-black/70 backdrop-blur-sm rounded-lg px-3 py-2 pointer-events-none flex items-center gap-2">
                       <svg 
-                        className="w-8 h-8 text-white" 
-                        fill="currentColor" 
-                        viewBox="0 0 20 20"
+                        className="w-6 h-6 text-white" 
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        viewBox="0 0 24 24"
                       >
-                        <path d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                       </svg>
+                      <span className="text-white text-sm font-medium">סרטון</span>
                     </div>
                   </>
                 ) : (
