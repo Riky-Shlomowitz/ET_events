@@ -259,7 +259,7 @@ export default function EventPlanning() {
             backgroundImage: 'url("/images/gallery/general-1.jpg")'
           }}
         >
-          <div className="absolute inset-0 bg-yellow-900/30"></div>
+          <div className="absolute inset-0 bg-yellow-900/40"></div>
         </div>
         
         <div className="relative z-10 text-center text-white px-4 max-w-5xl mx-auto">
