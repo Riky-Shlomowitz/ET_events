@@ -32,7 +32,7 @@ class GalleryController {
         category,
         status = 'active',
         page = 1,
-        limit = 50,
+        limit = 10000, // High limit to get all items by default
         sort = '-created_at'
       } = req.query;
 
