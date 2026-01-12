@@ -27,22 +27,8 @@ class ApiClient {
   }
 
   // Gallery methods
-  async getGalleryItems(options = {}) {
-    const { limit, page, category, status, sort } = options;
-    let url = '/gallery';
-    const params = new URLSearchParams();
-    
-    if (limit !== undefined) params.append('limit', limit);
-    if (page !== undefined) params.append('page', page);
-    if (category !== undefined) params.append('category', category);
-    if (status !== undefined) params.append('status', status);
-    if (sort !== undefined) params.append('sort', sort);
-    
-    if (params.toString()) {
-      url += '?' + params.toString();
-    }
-    
-    const response = await this.request(url);
+  async getGalleryItems() {
+    const response = await this.request('/gallery');
     return response.data || response;
   }
 
